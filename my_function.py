@@ -6,7 +6,7 @@ Created on Mon Nov 27 09:41:17 2023
 """
 import os
 import rasterio
-
+#testcommentaire
 #fonction
 
 def otb_path (otb_bin_path):
