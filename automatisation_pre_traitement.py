@@ -4,19 +4,18 @@ Created on Sun Nov 26 15:29:41 2023
 
 @author: joffrion
 """
-
+import os
+os.environ['MYOTB'] = 'C:/OTB-8.1.2-Win64/bin' #path to the OTB bin folder
 import my_function as f
 import glob
-import os
 
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
 data_path ='C:/Users/dsii/Documents/Teledec_python'
 #directory to register the local intermediate and final data
 working_directory = 'C:/Users/dsii/Documents/Teledec_python'
-#path to the OTB bin folder
-otb_bin_path ='C:/OTB-8.1.2-Win64/bin'
-f.otb_path(otb_bin_path)
+
+
 
 #init empty list of futur date_x path
 list_date_path = []
