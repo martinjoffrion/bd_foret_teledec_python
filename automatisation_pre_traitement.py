@@ -99,7 +99,3 @@ list_date_path.append(output_concat)
 f.rasterio_ndvi(output_concat,3,4)
 
 
-f.rasterio_ndvi(list_band_name[0],1,3)
-
-
-
