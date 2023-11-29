@@ -7,10 +7,8 @@ Created on Mon Nov 27 09:41:17 2023
 import os
 import rasterio
 #testcommentaire
-#fonction
-
-def otb_path (otb_bin_path):
-    global otb_bin_path
+otb_bin_path = os.environ['MYOTB']
+##fonction
 
 
 def cmd_ExtractROI(input_img,extraction_vector,output_raster):
