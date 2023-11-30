@@ -74,7 +74,28 @@ def cmd_ConcatenateImages(list_image, output_concat):
     cmd = (f'{otbcli_ConcatenateImages}  -il {list_image_str}'
            f' -out {output_concat} int16')
     os.system(cmd)
-    
+
+def get_date_f_b_path(str_band_path):
+        '''
+
+    Parameters
+    ----------
+    date : STR
+        DESCRIPTION.
+
+    Returns
+    -------
+    b_date : STR
+        DESCRIPTION.
+
+    '''
+    b_ = os.path.basename(str_band_path)
+    b_ = b_.replace('-','_').split('_')
+    b = [x for x in split if len(x) == 8 and int(x)>20000000]
+    b_date = b[0]
+    return b_date
+
+
 
 def rasterio_ndvi (file_path, red, pir):
     '''
