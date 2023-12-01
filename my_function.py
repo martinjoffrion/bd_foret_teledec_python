@@ -4,11 +4,62 @@ Created on Mon Nov 27 09:41:17 2023
 
 @author: dsii
 """
+!pip install osgeo
 import os
 import rasterio
+import geopandas as gpd
+from osgeo import gdal
 #testcommentaire
 otb_bin_path = os.environ['MYOTB']
 ##fonction
+
+"""
+        Traitement de la bd foret
+"""
+def traitement_bd_foret(bd_foret, emprise_etude, folder_traitement):
+    
+    foret = gpd.read_file(bd_foret)
+    emprise = gpd.read_file(emprise_etude)
+    # Identifier les valeurs à supprimer
+    valeurs_a_supprimer = ['Lande', 'Formation herbacée'] #données a supprimer dans la bd foret
+    foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)] #supprime les valeurs de la bd foret non souhaité
+    foret_filtre['raster'] = 1 #ajout d'un champs "raster" avec comme valeur 1 à la bd foret
+    intersection = gpd.overlay(foret_filtre, emprise, how='intersection')
+    intersection.to_file(folder_traitement, driver="ESRI Shapefile")
+
+
+def rasterize_shapefile(in_vector, out_image, emprise_etude):
+    '''
+    Parameters
+    ----------
+    in_vector : TYPE shapefile
+        DESCRIPTION. BD_foret avec les modifications apportées : suppress
+        
+    out_image : TYPE 
+        DESCRIPTION. chemin de sortie de la rasterisation
+        
+    emprise_etude : TYPE shapefile
+        DESCRIPTION. emprise d'étude pour découper la 
+
+    '''
+    spatial_resolution = 10
+    field_name = 'raster'
+    coordonnees_emprise = gpd.read_file(emprise_etude)
+    xmin, ymin, xmax, ymax = coordonnees_emprise.total_bounds
+    cmd_pattern = ("gdal_rasterize -a {field_name} "
+               "-tr {spatial_resolution} {spatial_resolution} "
+               "-te {xmin} {ymin} {xmax} {ymax} -ot Byte -of GTiff "
+               "{in_vector} {out_image}")
+
+    # fill the string with the parameter thanks to format function
+    cmd = cmd_pattern.format(in_vector=in_vector, xmin=xmin, ymin=ymin, xmax=xmax,
+                         ymax=ymax, out_image=out_image, field_name=field_name,
+                         spatial_resolution=spatial_resolution)
+    return cmd
+
+"""
+        Pre-traitement Images sentinels
+"""
 
 
 def cmd_ExtractROI(input_img,extraction_vector,output_raster):
