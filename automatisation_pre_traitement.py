@@ -91,7 +91,7 @@ for i in range (len(list_band_name)):
     band_name = os.path.basename(input_img)
     output_raster = f'{iwdir}\cut{band_name}'
     #appel de la fonction
-    f.cmd_ExtractROI(input_img,output_raster)
+    f.cmd_ExtractROI(input_img, emprise_etude, output_raster)
     list_bande_cut.append(output_raster)
     
 #update_dict
