@@ -70,6 +70,8 @@ def cmd_ConcatenateImages(list_image, output_concat):
 
     '''
     list_image_str = ' '.join(list_image)
+    #ou faire plutôt : list_image_str = ['{' + img_name + '}' for img_name in list_image] #pour avoir le format de ce qui est demandé par la fonction OTB
+    #chemin {'chemin_img1'}{'chemin_img2'}etc...
     otbcli_ConcatenateImages = f'{otb_bin_path}/otbcli_ConcatenateImages.bat'
     cmd = (f'{otbcli_ConcatenateImages}  -il {list_image_str}'
            f' -out {output_concat} int16')
