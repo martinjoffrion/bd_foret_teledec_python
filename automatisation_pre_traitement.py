@@ -4,10 +4,43 @@ Created on Sun Nov 26 15:29:41 2023
 
 @author: joffrion
 """
+!pip install --update rastererio
+!pip install osgeo
 import os
 os.environ['MYOTB'] = 'C:/OTB-8.1.2-Win64/bin' #path to the OTB bin folder
 import my_function as f
 import glob
+import pandas as pd 
+import geopandas as gpd
+from my_function import traitement_bd_foret
+from my_function import rasterize_shapefile
+from osgeo import gdal, osr
+
+"""
+            Découper la bd foret selon l'emprise de l'étude
+"""
+
+
+bd_foret="bd_foret/FORMATION_VEGETALE.shp"
+emprise_etude = 'D:/Cours_M2/Teledetecion_python/traitements/data/emprise_etude.shp'
+folder_traitement = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/bd_foret.shp'
+
+traitement_bd_foret(bd_foret,emprise_etude, folder_traitement) #réalise un intersect entre la bd foret et l'emprise d'étude
+
+
+"""
+            Rasterisation
+"""
+in_vector = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/bd_foret.shp'
+out_image = 'traitement_bd_foret/mask_bd_foret.tif'
+
+
+cmd = rasterize_shapefile(in_vector, out_image, emprise_etude)
+os.system(cmd)# execute the command in the terminal
+
+
+
+
 
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
