@@ -45,6 +45,17 @@ data_path ='C:/Users/dsii/Documents/Teledec_python'
 #directory to register the local intermediate and final data
 working_directory = 'C:/Users/dsii/Documents/Teledec_python'
 
+#create subdirectory to store intermediate result
+os.mkdir(f'{working_directory}\intermediate_result')
+#store short name
+iwdir = f'{working_directory}\intermediate_result'
+
+#create subdirectory to store finale date result
+os.mkdir(f'{working_directory}\date_result')
+#store short name
+ifwdir = f'{working_directory}\date_result'
+
+
 #init empty list of futur date_x path
 list_date_path = []
 #init empty list of futur ndvi date_x path
@@ -70,12 +81,7 @@ for subfil in range(len(files)):
     # to convert lists to dictionary
     dict_band = {list_band[i]: list_band_name[i] for i in range(len(list_band))}   
 
-    
-    #create subdirectory to store intermediate result
-    os.mkdir(f'{working_directory}\intermediate_result')
-    #store short name
-    iwdir = f'{working_directory}\intermediate_result'
-    
+            
     ##Découpage du raster selon le fichier emprise
     
     #init empty list of new band path
@@ -114,12 +120,9 @@ for subfil in range(len(files)):
         list_bande_finale.append(output_raster)
     
     list_bande_finale = list_band_10m + list_bande_finale
-        
-    #create subdirectory to store finale date result
-    os.mkdir(f'{working_directory}\date_result')
-    #store short name
-    ifwdir = f'{working_directory}\date_result'
-    
+
+            
+            ##Concaténation 
     #recup la date première band et store it in var
     date =  f.get_date_f_b_path(list_bande_finale[0])
     output_concat = f'{ifwdir}\output_{date}_x.tif'
