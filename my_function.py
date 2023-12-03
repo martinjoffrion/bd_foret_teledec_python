@@ -16,34 +16,57 @@ otb_bin_path = os.environ['MYOTB']
 """
         Traitement de la bd foret
 """
+
 def traitement_bd_foret(bd_foret, emprise_etude, folder_traitement):
+    '''
+
+    Parameters
+    ----------
+    bd_foret : STR
+        path ot the vector data.
+    emprise_etude : STR
+        path ot the ROI vector data.
+    folder_traitement : STR
+        path to write output.
+
+    Returns
+    -------
+    bd_foret_path : STR
+        Path to the output bd_foret.
+
+    '''
     
     foret = gpd.read_file(bd_foret)
     emprise = gpd.read_file(emprise_etude)
-    # Identifier les valeurs à supprimer
-    valeurs_a_supprimer = ['Lande', 'Formation herbacée'] #données a supprimer dans la bd foret
-    foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)] #supprime les valeurs de la bd foret non souhaité
-    foret_filtre['raster'] = 1 #ajout d'un champs "raster" avec comme valeur 1 à la bd foret
+    #Identifier les valeurs à supprimer
+    valeurs_a_supprimer = ['Lande', 'Formation herbacée']
+    #supprime les valeurs de la bd foret non souhaité
+    foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
+    #ajout d'un champs "raster" = 1 pour rasteriser
+    foret_filtre['raster'] = 1 
     intersection = gpd.overlay(foret_filtre, emprise, how='intersection')
-    intersection.to_file(folder_traitement, driver="ESRI Shapefile")
+    intersection.to_file(f'{folder_traitement}/bd_foret.shp', driver="ESRI Shapefile")
+    bd_foret_path = f'{folder_traitement}/bd_foret.shp'
+    return bd_foret_path
 
-
-def rasterize_shapefile(in_vector, out_image, emprise_etude):
+def rasterize_shapefile(in_vector, out_image, emprise_etude, field_name,#spatial_resolution):
     '''
     Parameters
     ----------
-    in_vector : TYPE shapefile
+    in_vector : STR
         DESCRIPTION. BD_foret avec les modifications apportées : suppress
         
-    out_image : TYPE 
+    out_image : STR
         DESCRIPTION. chemin de sortie de la rasterisation
         
-    emprise_etude : TYPE shapefile
-        DESCRIPTION. emprise d'étude pour découper la 
+    emprise_etude : STR 
+        DESCRIPTION. shapefile emprise d'étude
+    
+    spatial_resolution : INT
+        DESCRIPTION. integer of the target spatial resolution
 
     '''
-    spatial_resolution = 10
-    field_name = 'raster'
+    
     coordonnees_emprise = gpd.read_file(emprise_etude)
     xmin, ymin, xmax, ymax = coordonnees_emprise.total_bounds
     cmd_pattern = ("gdal_rasterize -a {field_name} "
@@ -55,7 +78,9 @@ def rasterize_shapefile(in_vector, out_image, emprise_etude):
     cmd = cmd_pattern.format(in_vector=in_vector, xmin=xmin, ymin=ymin, xmax=xmax,
                          ymax=ymax, out_image=out_image, field_name=field_name,
                          spatial_resolution=spatial_resolution)
-    return cmd
+    
+    os.system(cmd)# execute the command in the terminal
+
 
 """
         Pre-traitement Images sentinels
