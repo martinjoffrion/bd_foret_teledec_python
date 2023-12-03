@@ -12,38 +12,31 @@ import my_function as f
 import glob
 import pandas as pd 
 import geopandas as gpd
-from my_function import traitement_bd_foret
-from my_function import rasterize_shapefile
 from osgeo import gdal, osr
 
-"""
-            Découper la bd foret selon l'emprise de l'étude
-"""
-
-
-bd_foret="bd_foret/FORMATION_VEGETALE.shp"
-emprise_etude = 'D:/Cours_M2/Teledetecion_python/traitements/data/emprise_etude.shp'
-folder_traitement = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/bd_foret.shp'
-
-traitement_bd_foret(bd_foret,emprise_etude, folder_traitement) #réalise un intersect entre la bd foret et l'emprise d'étude
-
-
-"""
-            Rasterisation
-"""
-in_vector = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/bd_foret.shp'
-out_image = 'traitement_bd_foret/mask_bd_foret.tif'
-
-
-cmd = rasterize_shapefile(in_vector, out_image, emprise_etude)
-os.system(cmd)# execute the command in the terminal
-
-#### Warning variable emprise_etude ####
+    ##Espace de travail et donnée en entrée
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
 data_path ='C:/Users/dsii/Documents/Teledec_python'
 #directory to register the local intermediate and final data
 working_directory = 'C:/Users/dsii/Documents/Teledec_python'
+#path to bd_foret
+bd_foret="bd_foret/FORMATION_VEGETALE.shp"
+#path emprise
+roi = 'D:/Cours_M2/Teledetecion_python/traitements/data/emprise_etude.shp'
+
+
+    ##Découper la bd foret & Rasterisation
+    
+#réalise un intersect entre la bd foret et l'emprise d'étude
+in_vector = f.traitement_bd_foret(bd_foret,roi, working_directory) 
+
+out_image = f'{working_directory}/masque_foret.tif'
+field_name = 'raster'#field to rasterize
+f.rasterize_shapefile(in_vector, out_image, roi, field_name ,10)
+
+
+    ##Create subworking-dir
 
 #create subdirectory to store intermediate result
 os.mkdir(f'{working_directory}\intermediate_result')
@@ -55,6 +48,27 @@ os.mkdir(f'{working_directory}\date_result')
 #store short name
 ifwdir = f'{working_directory}\date_result'
 
+
+    ##Check SCR
+#ouverture de l'image et de l'emprise
+
+files = [f for f in os.listdir(data_path) if os.path.isdir(f)]
+result = glob.glob(F"{files[0]}/*FRE_B2.tif")
+img_path=result[0]
+
+img = rasterio.open(img_path)
+emprise = gpd.read_file(roi)
+
+#reprojectionimg_crs de l'emprise par rapport aux img S2
+img_crs = img.crs
+emprise_32631 = emprise.to_crs(img_crs)
+
+#sauvegarder la nouvelle projection de l'emprise
+emprise_32631.to_file(f'{iwdir}\emprise_32631', driver = 'ESRI Shapefile')
+
+new_emprise = f'{iwdir}\emprise_32631'
+
+    ##Start Pre_traitement
 
 #init empty list of futur date_x path
 list_date_path = []
@@ -92,7 +106,7 @@ for subfil in range(len(files)):
         band_name = os.path.basename(input_img)
         output_raster = f'{iwdir}\cut{band_name}'
         #appel de la fonction
-        f.cmd_ExtractROI(input_img,emprise_etude,output_raster)
+        f.cmd_ExtractROI(input_img,new_emprise,output_raster)
         list_bande_cut.append(output_raster)
         
     #update_dict
