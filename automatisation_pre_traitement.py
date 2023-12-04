@@ -51,10 +51,11 @@ ifwdir = f'{working_directory}\date_result'
 
     ##Check SCR
 #ouverture de l'image et de l'emprise
-
-files = [f for f in os.listdir(data_path) if os.path.isdir(f)]
-result = glob.glob(F"{files[0]}/*FRE_B2.tif")
-img_path=result[0]
+#boucle sur le nombre de subdirectory du data_path en entree
+files = [os.path.join(data_path,f) for f in os.listdir(data_path)
+         if os.path.isdir(os.path.join(data_path,f))]
+result_1 = glob.glob(F"{files[0]}/*FRE_B2.tif")
+img_path=result_1[0]
 
 img = rasterio.open(img_path)
 emprise = gpd.read_file(roi)
@@ -75,8 +76,6 @@ list_date_path = []
 #init empty list of futur ndvi date_x path
 list_ndvi_path = []
 
-#boucle sur le nombre de subdirectory du data_path en entree
-files = [f for f in os.listdir(data_path) if os.path.isdir(f)]#pas encore indenté
 for subfil in range(len(files)):
 
     ##Get the band with 'glob'
@@ -152,9 +151,13 @@ for subfil in range(len(files)):
 output_concat = 'Serie_temp_S2_allbands.tif'
 f.cmd_ConcatenateImages(list_date_path, output_concat)
 
+f.reprojection(output_concat,'2154')
+
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
 f.cmd_ConcatenateImages(list_ndvi_path, output_concat)
+
+f.reprojection(output_concat,'2154')
 
 ##Delete intermediate result folder
 import shutil
