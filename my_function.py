@@ -216,7 +216,62 @@ def rasterio_ndvi (file_path, red, pir):
     
     return ndvi_path
 
+def reprojection (input_raster, epsg_cible ,output_raster=None, dtype=None):
+    '''
     
+    Parameters
+    ----------
+    input_raster : STR
+        Path input raster to reproject.
+    epsg_cible : STR
+        EPSG code of the target CRS.
+    output_raster : STR, optional
+        Path output reproject raster to save. 
+        If the default is None, It will rewrite the input_raster
+    dtype : STR, optional
+    Numpy data type
+    
+    Returns
+    -------
+    None.
+
+    '''
+    
+    #open source raster
+    srcRst = rasterio.open(input_raster)
+    dstCrs = {'init': f'EPSG:{epsg_cible}'}
+    
+    #calculate transform array and shape of reprojected raster
+    transform, width, height = rasterio.warp.calculate_default_transform(
+            srcRst.crs, dstCrs, srcRst.width, srcRst.height, *srcRst.bounds)
+    
+    if dtype==None : dtype=srcRst.dtype
+    
+    #Update the destination meta
+    dstmeta = srcRst.meta.copy()
+    dstmeta.update({
+            'crs': dstCrs,
+            'transform': transform,
+            'width': width,
+            'height': height,
+            'dtype': dtype
+        })
+    #open destination raster
+    if output_raster==None : output_raster=input_raster
+    dstRst = rasterio.open(output_raster, 'w', **dstmeta)
+    #reproject and save raster band data
+    
+    for band in range(1, srcRst.count + 1):
+        rasterio.warp.reproject(
+            source=rasterio.band(srcRst, band),
+            destination=rasterio.band(dstRst, band),
+            src_transform=srcRst.transform,
+            src_crs=srcRst.crs,
+            dst_transform=transform,
+            dst_crs=dstCrs,
+            resampling=rasterio.warp.Resampling.nearest)
+    #close destination raster
+    dstRst.close()
     
     
     
