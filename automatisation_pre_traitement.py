@@ -4,27 +4,29 @@ Created on Sun Nov 26 15:29:41 2023
 
 @author: joffrion
 """
-!pip install --update rastererio
-!pip install osgeo
+#!pip install --update rastererio
+#!pip install osgeo
 import os
 os.environ['MYOTB'] = 'C:/OTB-8.1.2-Win64/bin' #path to the OTB bin folder
 import my_function as f
 import glob
 import pandas as pd 
 import geopandas as gpd
+import rasterio
 from osgeo import gdal, osr
 
     ##Espace de travail et donnée en entrée
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
-data_path ='C:/Users/dsii/Documents/Teledec_python'
+data_path ='C:/Users/dsii/Documents/projet_teledec/data_set'
 #directory to register the local intermediate and final data
-working_directory = 'C:/Users/dsii/Documents/Teledec_python'
+working_directory = 'C:/Users/dsii/Documents/projet_teledec/traitement'
 #path to bd_foret
-bd_foret="bd_foret/FORMATION_VEGETALE.shp"
+bd_foret='C:/Users/dsii/Documents/projet_teledec/data_set/FORMATION_VEGETALE.shp'
 #path emprise
-roi = 'D:/Cours_M2/Teledetecion_python/traitements/data/emprise_etude.shp'
+roi = 'C:/Users/dsii/Documents/projet_teledec/data_set/emprise_etude.shp'
 
+os.chdir(working_directory)
 
     ##Découper la bd foret & Rasterisation
     
@@ -149,14 +151,12 @@ for subfil in range(len(files)):
 
 #concat finale des 6 dates        
 output_concat = 'Serie_temp_S2_allbands.tif'
-f.cmd_ConcatenateImages(list_date_path, output_concat)
-
-f.reprojection(output_concat,'2154')
+f.cmd_ConcatenateImages(list_date_path, f'{ifwdir}\{output_concat}')
+f.reprojection(output_concat,'2154',output_concat)
 
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
-f.cmd_ConcatenateImages(list_ndvi_path, output_concat)
-
+f.cmd_ConcatenateImages(list_ndvi_path, f'{ifwdir}\{output_concat}')
 f.reprojection(output_concat,'2154')
 
 ##Delete intermediate result folder
