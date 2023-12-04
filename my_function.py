@@ -169,7 +169,7 @@ def get_date_f_b_path(str_band_path):
     '''
     b_ = os.path.basename(str_band_path)
     b_ = b_.replace('-','_').split('_')
-    b = [x for x in split if len(x) == 8 and int(x)>20000000]
+    b = [x for x in b_ if len(x) == 8 and int(x)>20000000]
     b_date = b[0]
     return b_date
 
