@@ -169,4 +169,33 @@ f.warp(f'{ifwdir}\{output_concat}', output_concat, '2154')
 import shutil
 shutil.rmtree(iwdir)
 
+############Mask RASTERIO - à réadapter au code
+import rasterio
+from rasterio.mask import mask
+import geopandas as gpd
 
+# Charger la bande Sentinel-2A
+sentinel_path = 'D:/projet_teledetection_python/temp/SENTINEL2B_20220125-105852-948_L2A_T31TCJ_C_V3-0_FRE_B2_2154.tif'
+sentinel = rasterio.open(sentinel_path)
+
+# Charger le masque de la forêt
+masque_foret_path = 'D:/projet_teledetection_python/bd_foret_cut.shp'
+masque_foret = gpd.read_file(masque_foret_path)
+
+# Assurez-vous que le masque et la bande ont la même géométrie
+masque_foret = masque_foret.to_crs(sentinel.crs)
+
+# Utiliser la fonction mask de rasterio pour découper selon le masque
+bande_masquee, transform = mask(sentinel, masque_foret.geometry, crop=True)
+
+# Mettre à jour les métadonnées pour la nouvelle bande masquée
+metadata = sentinel.meta
+metadata.update({'driver': 'GTiff',
+                 'height': bande_masquee.shape[1],
+                 'width': bande_masquee.shape[2],
+                 'transform': transform})
+
+# Enregistrer la nouvelle bande masquée
+output_path = 'D:/projet_teledetection_python/temp/bande_sentinel_masquee.tif'
+with rasterio.open(output_path, 'w', **metadata) as dest:
+    dest.write(bande_masquee)
