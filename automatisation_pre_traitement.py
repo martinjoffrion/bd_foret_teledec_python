@@ -8,6 +8,7 @@ Created on Sun Nov 26 15:29:41 2023
 #!pip install osgeo
 import os
 os.environ['MYOTB'] = 'C:/OTB-8.1.2-Win64/bin' #path to the OTB bin folder
+os.environ['MYRAM'] = '2000'
 import my_function as f
 import glob
 import pandas as pd 
@@ -18,13 +19,13 @@ from osgeo import gdal, osr
     ##Espace de travail et donnée en entrée
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
-data_path ='C:/Users/dsii/Documents/projet_teledec/data_set'
+data_path ='C:/Temp/bd_foret_teledec_python-main/data_set'
 #directory to register the local intermediate and final data
-working_directory = 'C:/Users/dsii/Documents/projet_teledec/traitement'
+working_directory = 'C:/Temp/bd_foret_teledec_python-main/traitement'
 #path to bd_foret
-bd_foret='C:/Users/dsii/Documents/projet_teledec/data_set/FORMATION_VEGETALE.shp'
+bd_foret='C:/Temp/bd_foret_teledec_python-main/data_set/FORMATION_VEGETALE.shp'
 #path emprise
-roi = 'C:/Users/dsii/Documents/projet_teledec/data_set/emprise_etude.shp'
+roi = 'C:/Temp/bd_foret_teledec_python-main/data_set/emprise_etude.shp'
 
 os.chdir(working_directory)
 
@@ -41,14 +42,14 @@ f.rasterize_shapefile(in_vector, out_image, roi, field_name ,10)
     ##Create subworking-dir
 
 #create subdirectory to store intermediate result
-os.mkdir(f'{working_directory}\intermediate_result')
+os.mkdir(f'{working_directory}/intermediate_result')
 #store short name
-iwdir = f'{working_directory}\intermediate_result'
+iwdir = f'{working_directory}/intermediate_result'
 
 #create subdirectory to store finale date result
-os.mkdir(f'{working_directory}\date_result')
+os.mkdir(f'{working_directory}/date_result')
 #store short name
-ifwdir = f'{working_directory}\date_result'
+ifwdir = f'{working_directory}/date_result'
 
 
     ##Check SCR
@@ -67,9 +68,9 @@ img_crs = img.crs
 emprise_32631 = emprise.to_crs(img_crs)
 
 #sauvegarder la nouvelle projection de l'emprise
-emprise_32631.to_file(f'{iwdir}\emprise_32631', driver = 'ESRI Shapefile')
+emprise_32631.to_file(f'{iwdir}/emprise_32631', driver = 'ESRI Shapefile')
 
-new_emprise = f'{iwdir}\emprise_32631'
+new_emprise = f'{iwdir}/emprise_32631'
 
     ##Start Pre_traitement
 
@@ -105,7 +106,7 @@ for subfil in range(len(files)):
     for i in range (len(list_band_name)):
         input_img = list_band_name[i]
         band_name = os.path.basename(input_img)
-        output_raster = f'{iwdir}\cut{band_name}'
+        output_raster = f'{iwdir}/cut{band_name}'
         #appel de la fonction
         f.cmd_ExtractROI(input_img,new_emprise,output_raster)
         list_bande_cut.append(output_raster)
@@ -129,7 +130,7 @@ for subfil in range(len(files)):
         inr = list_band_10m[0] #premiere element de la liste bande ref 10m
         inm = list_bande_20m_plus[i]
         band_name = os.path.basename(inm)
-        output_raster = f'{iwdir}\_10m_{band_name}'
+        output_raster = f'{iwdir}/_10m_{band_name}'
         #appel de la fonction
         f.cmd_Superimpose(inr, inm, output_raster)
         list_bande_finale.append(output_raster)
@@ -140,10 +141,10 @@ for subfil in range(len(files)):
             ##Concaténation 
     #recup la date première band et store it in var
     date =  f.get_date_f_b_path(list_bande_finale[0])
-    output_concat = f'{ifwdir}\output_{date}_x.tif'
-    list_date_path.append(output_concat)
+    output_concat = f'{ifwdir}/output_{date}_date.tif'
     #appel de la fonction
     f.cmd_ConcatenateImages(list_bande_finale, output_concat)
+    list_date_path.append(output_concat)
     
     #produce ndvi
     ndvi_path = f.rasterio_ndvi(output_concat,3,4)#return ndvi path  ?
@@ -151,13 +152,18 @@ for subfil in range(len(files)):
 
 #concat finale des 6 dates        
 output_concat = 'Serie_temp_S2_allbands.tif'
-f.cmd_ConcatenateImages(list_date_path, f'{ifwdir}\{output_concat}')
-f.reprojection(output_concat,'2154',output_concat)
+f.cmd_ConcatenateImages(list_date_path, f'{ifwdir}/{output_concat}')
+f.warp(f'{ifwdir}/{output_concat}', output_concat, '2154')
+
+
 
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
-f.cmd_ConcatenateImages(list_ndvi_path, f'{ifwdir}\{output_concat}')
-f.reprojection(output_concat,'2154')
+f.cmd_ConcatenateImages(list_ndvi_path, f'{ifwdir}/{output_concat}')
+#f.warp(f'{list_ndvi_path[0]}', output_concat, '2154')######ligne test une image
+f.warp(f'{ifwdir}\{output_concat}', output_concat, '2154')
+
+
 
 ##Delete intermediate result folder
 import shutil

@@ -12,7 +12,7 @@ from osgeo import gdal
 #testcommentaire
 otb_bin_path = os.environ['MYOTB']
 ##fonction
-
+RAM = os.environ['MYRAM']
 """
         Traitement de la bd foret
 """
@@ -105,7 +105,7 @@ def cmd_ExtractROI(input_img,extraction_vector,output_raster):
     #découpage du raster selon le fichier emprise
     otbcli_ExtractROI = f'{otb_bin_path}/otbcli_ExtractROI.bat'
     cmd = (f'{otbcli_ExtractROI}  -mode fit -mode.fit.vect {extraction_vector}'
-           f' -in {input_img} -out {output_raster} int16')
+           f' -in {input_img} -out {output_raster} int16 -ram {RAM}')
     os.system(cmd)
 
 
@@ -126,7 +126,7 @@ def cmd_Superimpose(inr,inm,output_raster):
     '''
     otbcli_Superimpose = f'{otb_bin_path}/otbcli_Superimpose.bat'
     cmd = (f'{otbcli_Superimpose} -inr {inr} -inm {inm} -interpolator nn'
-           f' -out {output_raster} int16 ')
+           f' -out {output_raster} int16 -ram {RAM}')
     os.system(cmd)
     
 
@@ -150,7 +150,7 @@ def cmd_ConcatenateImages(list_image, output_concat):
     #chemin {'chemin_img1'}{'chemin_img2'}etc...
     otbcli_ConcatenateImages = f'{otb_bin_path}/otbcli_ConcatenateImages.bat'
     cmd = (f'{otbcli_ConcatenateImages}  -il {list_image_str}'
-           f' -out {output_concat} int16')
+           f' -out {output_concat} int16 -ram {RAM}')
     os.system(cmd)
 
 def get_date_f_b_path(str_band_path):
@@ -202,7 +202,7 @@ def rasterio_ndvi (file_path, red, pir):
     nred = raster.read(pir)
     rouge = rouge.astype('float32')
     nred = nred.astype('float32')
-    ndvi = (pir - rouge) / (pir + rouge)
+    ndvi = (nred - rouge) / (nred + rouge)
     
     destination_meta = raster.profile
     # Changement du nombre de bande en sortie (1 seule pour le NDVI)
@@ -212,7 +212,8 @@ def rasterio_ndvi (file_path, red, pir):
     
     raster_sortie = rasterio.open(f'{rdir}/ndvi_{rname}','w', **destination_meta)
     raster_sortie.write(ndvi, 1)
-    ndvi_path = f'{rdir}\ndvi_{rname}'
+    ndvi_path = f'{rdir}/ndvi_{rname}'
+    raster.close
     
     return ndvi_path
 
@@ -274,7 +275,8 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
     dstRst.close()
     
     
+def warp( in_img,out_img,code_epsg):
+    gdal.Warp (out_img, in_img, dstSRS=f'EPSG:{code_epsg}') 
     
-    
-    
-    
+
+
