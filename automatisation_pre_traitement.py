@@ -52,6 +52,7 @@ ifwdir = f'{working_directory}/date_result'
 gdf_mask , foret_filtre_path = f.traitement_forest(bd_foret,iwdir)
 #in_vector = f.traitement_bd_foret(bd_foret,roi, working_directory) 
 
+foret_filtre_path = f'{iwdir}/{foret_filtre_path}'
 out_image = 'masque_foret.tif'
 field = 'raster'#field to rasterize
 f.rasterize_shapefile(foret_filtre_path, out_image, roi,field, 10)
