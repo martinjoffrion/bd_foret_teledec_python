@@ -279,7 +279,8 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
     
 def warp( in_img,out_img,code_epsg):
     gdal.Warp (out_img, in_img, dstSRS=f'EPSG:{code_epsg}') 
-    
+
+#Création des digrammes du nombre de polygones par classe 
 def create_polygons_bar_charts(shapefile_path, column_names, save_path_template):
     # Charger le shapefile
     gdf = gpd.read_file(shapefile_path)
