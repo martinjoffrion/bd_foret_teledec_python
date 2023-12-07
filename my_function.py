@@ -42,6 +42,8 @@ def traitement_bd_foret(bd_foret, emprise_etude, folder_traitement):
     valeurs_a_supprimer = ['Lande', 'Formation herbacée']
     #supprime les valeurs de la bd foret non souhaité
     foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
+    foret_filtre = foret_filtre[~foret_filtre['TFV'].str.startswith('Forêt ouverte')]
+
     #ajout d'un champs "raster" = 1 pour rasteriser
     foret_filtre['raster'] = 1 
     intersection = gpd.overlay(foret_filtre, emprise, how='intersection')
@@ -278,5 +280,40 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
 def warp( in_img,out_img,code_epsg):
     gdal.Warp (out_img, in_img, dstSRS=f'EPSG:{code_epsg}') 
     
+def create_polygons_bar_charts(shapefile_path, column_names, save_path_template):
+    # Charger le shapefile
+    gdf = gpd.read_file(shapefile_path)
 
+    for column_name in column_names:
+        # Extrait le numéro de la colonne (assumant que le format est "Code_lvlXX")
+        column_number = ''.join(filter(str.isdigit, column_name))
+
+        # Compter le nombre de polygones par valeur de la colonne spécifiée
+        count_by_column = gdf[column_name].value_counts()
+
+        # Créer le graphique
+        plt.figure(figsize=(10, 6))
+        ax = count_by_column.plot(kind='bar', color='darkgreen')
+        plt.title(f'Nombre de Polygones par {column_name}')
+        plt.xlabel(column_name)
+        plt.ylabel('Nombre de Polygones')
+        plt.xticks(rotation=45, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
+        plt.tight_layout()
+
+        # Ajouter une légende
+        plt.legend(['Nombre de Polygones'], loc='upper right')
+
+        # Ajouter une grille à l'arrière
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Annoter chaque barre avec sa valeur
+        for i, v in enumerate(count_by_column):
+            ax.text(i, v + 0.1, str(v), ha='center', va='bottom', fontsize=8)
+
+        # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
+        save_path = save_path_template.format(column_number=column_number)
+        plt.savefig(save_path)
+
+        # Afficher le graphique si nécessaire
+        plt.show()
 
