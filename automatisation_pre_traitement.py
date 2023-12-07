@@ -199,3 +199,13 @@ metadata.update({'driver': 'GTiff',
 output_path = 'D:/projet_teledetection_python/temp/bande_sentinel_masquee.tif'
 with rasterio.open(output_path, 'w', **metadata) as dest:
     dest.write(bande_masquee)
+
+
+
+# Création des diagrammes
+
+column_name = ['Code_lvl1','Code_lvl2','Code_lvl3']
+shapefile_path = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/Sample_BD_foret_T31TCJ.shp'
+save_path_template = 'D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/diag_baton_nb_poly_lvl{column_number}.png'
+
+create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
