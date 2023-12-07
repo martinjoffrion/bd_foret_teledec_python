@@ -7,6 +7,7 @@ Created on Mon Nov 27 09:41:17 2023
 
 import os
 import rasterio
+from rasterio.mask import mask
 import geopandas as gpd
 from osgeo import gdal
 import matplotlib as plt
@@ -240,7 +241,7 @@ def apply_mask (fp_in_image,fp_out_image,gdf_mask):
     
     with rasterio.open(fp_in_image) as source:
         emprise = gdf_mask.to_crs(source.crs)
-        out_image, out_transform = rasterio.mask.mask(source, emprise.geometry,crop=True)
+        out_image, out_transform = mask(source, emprise.geometry,crop=True)
         out_meta = source.meta.copy() 
         out_meta.update({"driver": "GTiff", 
                      "height": out_image.shape[1], 
