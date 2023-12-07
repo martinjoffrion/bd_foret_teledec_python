@@ -9,47 +9,46 @@ import os
 import rasterio
 import geopandas as gpd
 from osgeo import gdal
+import matplotlib as plt
 #testcommentaire
 otb_bin_path = os.environ['MYOTB']
 ##fonction
 RAM = os.environ['MYRAM']
+
 """
         Traitement de la bd foret
 """
 
-def traitement_bd_foret(bd_foret, emprise_etude, folder_traitement):
+def traitement_forest (bd_foret_path,out_dir):
     '''
 
     Parameters
     ----------
-    bd_foret : STR
-        path ot the vector data.
-    emprise_etude : STR
-        path ot the ROI vector data.
-    folder_traitement : STR
-        path to write output.
+    bd_foret_path : STR
+        DESCRIPTION.
+    out_dir : STR
+        DESCRIPTION.
 
     Returns
     -------
-    bd_foret_path : STR
-        Path to the output bd_foret.
+    foret_filtre : Geodataframe
+        DESCRIPTION.
+    foret_filtre_path : STR
+        DESCRIPTION.
 
     '''
-    
-    foret = gpd.read_file(bd_foret)
-    emprise = gpd.read_file(emprise_etude)
+    #Open vector file
+    foret = gpd.read_file(bd_foret_path)
     #Identifier les valeurs à supprimer
     valeurs_a_supprimer = ['Lande', 'Formation herbacée']
     #supprime les valeurs de la bd foret non souhaité
     foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
-    foret_filtre = foret_filtre[~foret_filtre['TFV'].str.startswith('Forêt ouverte')]
-
-    #ajout d'un champs "raster" = 1 pour rasteriser
+    #ajout d'un champs "raster" = 1 pour rasteriser      
     foret_filtre['raster'] = 1 
-    intersection = gpd.overlay(foret_filtre, emprise, how='intersection')
-    intersection.to_file(f'{folder_traitement}/bd_foret.shp', driver="ESRI Shapefile")
-    bd_foret_path = f'{folder_traitement}/bd_foret.shp'
-    return bd_foret_path
+    foret_filtre.to_file(f'{out_dir}/bd_foret', driver="ESRI Shapefile")
+    foret_filtre_path = 'bd_foret/bd_foret.shp'
+    
+    return foret_filtre, foret_filtre_path
 
 def rasterize_shapefile(in_vector, out_image, emprise_etude, field_name, spatial_resolution):
     '''
@@ -218,6 +217,42 @@ def rasterio_ndvi (file_path, red, pir):
     raster.close
     
     return ndvi_path
+
+def apply_mask (fp_in_image,fp_out_image,gdf_mask):
+    '''
+
+    Parameters
+    ----------
+    fp_in_image : STR
+        DESCRIPTION.
+    fp_out_image : STR
+        DESCRIPTION.
+    gdf_mask : Geodataframe
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    '''
+    
+    gdf_mask = gdf_mask.dissolve()
+    
+    with rasterio.open(fp_in_image) as source:
+        emprise = gdf_mask.to_crs(source.crs)
+        out_image, out_transform = rasterio.mask.mask(source, emprise.geometry,crop=True)
+        out_meta = source.meta.copy() 
+        out_meta.update({"driver": "GTiff", 
+                     "height": out_image.shape[1], 
+                     "width": out_image.shape[2],
+                     "transform": out_transform,
+                     'nodata': '0'})
+        source.close()
+        
+    with rasterio.open(fp_out_image, "w", **out_meta) as destination:
+        destination.write(out_image)
+        destination.close()
+
 
 def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
     '''

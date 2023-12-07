@@ -15,6 +15,11 @@ import pandas as pd
 import geopandas as gpd
 import rasterio
 from osgeo import gdal, osr
+import time
+
+#Initiate compteur
+# get the start time
+st = time.time()
 
     ##Espace de travail et donnée en entrée
 
@@ -29,16 +34,6 @@ roi = 'C:/Temp/bd_foret_teledec_python-main/data_set/emprise_etude.shp'
 
 os.chdir(working_directory)
 
-    ##Découper la bd foret & Rasterisation
-    
-#réalise un intersect entre la bd foret et l'emprise d'étude
-in_vector = f.traitement_bd_foret(bd_foret,roi, working_directory) 
-
-out_image = f'{working_directory}/masque_foret.tif'
-field_name = 'raster'#field to rasterize
-f.rasterize_shapefile(in_vector, out_image, roi, field_name ,10)
-
-
     ##Create subworking-dir
 
 #create subdirectory to store intermediate result
@@ -50,6 +45,17 @@ iwdir = f'{working_directory}/intermediate_result'
 os.mkdir(f'{working_directory}/date_result')
 #store short name
 ifwdir = f'{working_directory}/date_result'
+
+    ##Découper la bd foret & Rasterisation
+    
+#Nettoyage de la donnée, création champ raster
+gdf_mask , foret_filtre_path = f.traitement_forest(bd_foret,iwdir)
+#in_vector = f.traitement_bd_foret(bd_foret,roi, working_directory) 
+
+out_image = 'masque_foret.tif'
+field = 'raster'#field to rasterize
+f.rasterize_shapefile(foret_filtre_path, out_image, roi,field, 10)
+#f.rasterize_shapefile(in_vector, out_image, roi, field_name ,10)
 
 
     ##Check SCR
@@ -152,54 +158,26 @@ for subfil in range(len(files)):
 
 #concat finale des 6 dates        
 output_concat = 'Serie_temp_S2_allbands.tif'
-f.cmd_ConcatenateImages(list_date_path, f'{ifwdir}/{output_concat}')
-f.warp(f'{ifwdir}/{output_concat}', output_concat, '2154')
+f.cmd_ConcatenateImages(list_date_path, f'{iwdir}/{output_concat}')
+f.warp(f'{iwdir}/{output_concat}', f'{ifwdir}/{output_concat}', '2154')
+f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
 
 
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
-f.cmd_ConcatenateImages(list_ndvi_path, f'{ifwdir}/{output_concat}')
-#f.warp(f'{list_ndvi_path[0]}', output_concat, '2154')######ligne test une image
-f.warp(f'{ifwdir}\{output_concat}', output_concat, '2154')
+f.cmd_ConcatenateImages(list_ndvi_path, f'{iwdir}/{output_concat}')
+f.warp(f'{iwdir}\{output_concat}', f'{ifwdir}\{output_concat}', '2154')
+f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
-
+#compteur 
+et = time.time()
+elapsed_time = et - st
+print('Execution time:', elapsed_time, 'seconds')
 
 ##Delete intermediate result folder
 import shutil
 shutil.rmtree(iwdir)
-
-############Mask RASTERIO - à réadapter au code
-import rasterio
-from rasterio.mask import mask
-import geopandas as gpd
-
-# Charger la bande Sentinel-2A
-sentinel_path = 'D:/projet_teledetection_python/temp/SENTINEL2B_20220125-105852-948_L2A_T31TCJ_C_V3-0_FRE_B2_2154.tif'
-sentinel = rasterio.open(sentinel_path)
-
-# Charger le masque de la forêt
-masque_foret_path = 'D:/projet_teledetection_python/bd_foret_cut.shp'
-masque_foret = gpd.read_file(masque_foret_path)
-
-# Assurez-vous que le masque et la bande ont la même géométrie
-masque_foret = masque_foret.to_crs(sentinel.crs)
-
-# Utiliser la fonction mask de rasterio pour découper selon le masque
-bande_masquee, transform = mask(sentinel, masque_foret.geometry, crop=True)
-
-# Mettre à jour les métadonnées pour la nouvelle bande masquée
-metadata = sentinel.meta
-metadata.update({'driver': 'GTiff',
-                 'height': bande_masquee.shape[1],
-                 'width': bande_masquee.shape[2],
-                 'transform': transform})
-
-# Enregistrer la nouvelle bande masquée
-output_path = 'D:/projet_teledetection_python/temp/bande_sentinel_masquee.tif'
-with rasterio.open(output_path, 'w', **metadata) as dest:
-    dest.write(bande_masquee)
-
 
 
 # Création des diagrammes
@@ -208,4 +186,4 @@ column_name = ['Code_lvl1','Code_lvl2','Code_lvl3']
 shapefile_path = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/Sample_BD_foret_T31TCJ.shp'
 save_path_template = 'D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/diag_baton_nb_poly_lvl{column_number}.png'
 
-create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
+f.create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
