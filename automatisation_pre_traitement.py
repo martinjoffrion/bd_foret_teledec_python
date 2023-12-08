@@ -180,11 +180,3 @@ print('Execution time:', elapsed_time, 'seconds')
 import shutil
 shutil.rmtree(iwdir)
 
-
-# Création des diagrammes
-
-column_name = ['Code_lvl1','Code_lvl2','Code_lvl3']
-shapefile_path = 'D:/Cours_M2/Teledetecion_python/traitements/traitement_bd_foret/Sample_BD_foret_T31TCJ.shp'
-save_path_template = 'D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/diag_baton_nb_poly_lvl{column_number}.png'
-
-f.create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
