@@ -132,7 +132,7 @@ def cmd_Superimpose(inr,inm,output_raster):
     os.system(cmd)
     
 
-def cmd_ConcatenateImages(list_image, output_concat):
+def cmd_ConcatenateImages(list_image, output_concat, type = None):
     '''
 
     Parameters
@@ -141,18 +141,20 @@ def cmd_ConcatenateImages(list_image, output_concat):
         DESCRIPTION.
     output_concat : STR
         DESCRIPTION.
+    type : STR OPTIONAL
 
     Returns
     -------
     None.
 
     '''
+    if type == None: type = 'int16'
     list_image_str = ' '.join(list_image)
     #ou faire plutôt : list_image_str = ['{' + img_name + '}' for img_name in list_image] #pour avoir le format de ce qui est demandé par la fonction OTB
     #chemin {'chemin_img1'}{'chemin_img2'}etc...
     otbcli_ConcatenateImages = f'{otb_bin_path}/otbcli_ConcatenateImages.bat'
     cmd = (f'{otbcli_ConcatenateImages}  -il {list_image_str}'
-           f' -out {output_concat} int16 -ram {RAM}')
+           f' -out {output_concat} {type} -ram {RAM}')
     os.system(cmd)
 
 def get_date_f_b_path(str_band_path):
