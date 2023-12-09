@@ -24,13 +24,13 @@ st = time.time()
     ##Espace de travail et donnée en entrée
 
 #folder containing 6 subdirectory for the 6 SENTI II S2A img
-data_path ='C:/Temp/bd_foret_teledec_python-main/data_set'
+data_path ='C:/Users/dsii/Documents/projet_teledec/data_set'
 #directory to register the local intermediate and final data
-working_directory = 'C:/Temp/bd_foret_teledec_python-main/traitement'
+working_directory = 'C:/Users/dsii/Documents/projet_teledec/traitement'
 #path to bd_foret
-bd_foret='C:/Temp/bd_foret_teledec_python-main/data_set/FORMATION_VEGETALE.shp'
+bd_foret='C:/Users/dsii/Documents/projet_teledec/data_set/FORMATION_VEGETALE.shp'
 #path emprise
-roi = 'C:/Temp/bd_foret_teledec_python-main/data_set/emprise_etude.shp'
+roi = 'C:/Users/dsii/Documents/projet_teledec/data_set/emprise_etude.shp'
 
 os.chdir(working_directory)
 
@@ -159,7 +159,7 @@ for subfil in range(len(files)):
 
 #concat finale des 6 dates        
 output_concat = 'Serie_temp_S2_allbands.tif'
-f.cmd_ConcatenateImages(list_date_path, f'{iwdir}/{output_concat}')
+f.cmd_ConcatenateImages(list_date_path, f'{iwdir}/{output_concat}', 'uint16')
 f.warp(f'{iwdir}/{output_concat}', f'{ifwdir}/{output_concat}', '2154')
 f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
@@ -167,7 +167,7 @@ f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
-f.cmd_ConcatenateImages(list_ndvi_path, f'{iwdir}/{output_concat}')
+f.cmd_ConcatenateImages(list_ndvi_path, f'{iwdir}/{output_concat}', 'float')
 f.warp(f'{iwdir}\{output_concat}', f'{ifwdir}\{output_concat}', '2154')
 f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
