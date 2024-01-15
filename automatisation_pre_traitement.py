@@ -168,7 +168,7 @@ f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 #concat finale des 6 dates NDVI 
 output_concat = 'Serie_temp_S2_ndvi.tif'
 f.cmd_ConcatenateImages(list_ndvi_path, f'{iwdir}/{output_concat}', 'float')
-f.warp(f'{iwdir}\{output_concat}', f'{ifwdir}\{output_concat}', '2154')
+f.warp(f'{iwdir}/{output_concat}', f'{ifwdir}/{output_concat}', '2154')
 f.apply_mask( f'{ifwdir}/{output_concat}', output_concat, gdf_mask)
 
 #compteur 
