@@ -44,6 +44,7 @@ def traitement_forest (bd_foret_path,out_dir):
     valeurs_a_supprimer = ['Lande', 'Formation herbacée']
     #supprime les valeurs de la bd foret non souhaité
     foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
+    foret_filtre = foret_filtre[~foret_filtre['TFV'].str.startswith('Forêt ouverte')]
     #ajout d'un champs "raster" = 1 pour rasteriser      
     foret_filtre['raster'] = 1 
     foret_filtre.to_file(f'{out_dir}/bd_foret', driver="ESRI Shapefile")
