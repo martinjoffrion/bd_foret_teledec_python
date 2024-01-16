@@ -8,10 +8,9 @@ Created on Sun Nov 26 15:29:41 2023
 ########### CHEMINS D'ACCES A RENSEIGNER
 ################################################
 
-# --- Mettre le chemin d'accès du dossier rendu dézippé
+# --- Chemin d'accès du dossier rendu dézippé :
 # Exemple : working_directory ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4'
-#working_directory ='le/chemin/vers/projet_teledection_sigmaM2_group4'
-working_directory = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4'
+working_directory ='le/chemin/vers/projet_teledection_sigmaM2_group4'
 
 #!pip install --update rasterio
 import glob
@@ -19,32 +18,29 @@ import geopandas as gpd
 import rasterio
 import os
 os.chdir(working_directory)
+
 # --- Mettre le chemin d'accès du dossier OTB-8.1.2/bin :
 # Exemple : os.environ['MYOTB'] = 'C:/Users/clair/Documents/OTB-8.1.2-Win64/bin'
-#os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
-os.environ['MYOTB'] = 'C:/Users/clair/Documents/OTB-8.1.2-Win64/bin'
+os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
+
 os.environ['MYRAM'] = '8000'
 import my_function as f
 
-# --- Chemin d'accès du dossier que vous avez créé qui comprendra les résultats intermédiaires et les images concaténées par date :
+# --- Chemin d'accès du dossier qui comprendra les résultats intermédiaires et les images concaténées par date :
 # Exemple : working_directory ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/traitement'
-#working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
-working_directory = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/traitement'
+working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
 
-## Chemin d'accès du dossier comprenant les données d'entrée :
+# --- Chemin d'accès du dossier comprenant les données d'entrée :
 # Exemple : data_path ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set'
-#data_path ='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
-data_path = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set'
+data_path ='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
 
-# --- Chemin d'accès du fichier shapefile de la base de données BD_FORET
+# --- Chemin d'accès du fichier shapefile de la base de données BD_FORET :
 # Exemple : bd_foret='C:/Users/clair/Documents/projet_teledetection_python/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
-#bd_foret='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
-bd_foret = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
+bd_foret='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
 
-# --- Chemin d'accès du fichier shapefile de l'emprise d'étude
+# --- Chemin d'accès du fichier shapefile de l'emprise d'étude :
 # Exemple : roi = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
-#roi = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
-roi = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
+roi = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
 
 
 ################################################
