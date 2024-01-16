@@ -1,7 +1,4 @@
 ## Verification : pre_traitement.py
-<details>
- 
-</details>
 ### Conventions à vérifier
 - [ ] Nom du fichier : pre_traitement.py
 - [ ] Fonctions mises dans script my_function.py à part
