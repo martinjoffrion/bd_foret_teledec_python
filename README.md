@@ -62,4 +62,37 @@
  - [ ] où les zones de non forêt sont masquées (valeur des pixels = 0) grâce au masque masque_foret.tif que vous avez créé ;
  - [ ] encodée en float32 (ou float).
  - [ ] Vous nommerez l'image finale Serie_temp_S2_ndvi.tif
-</details>
+
+# Fichiers à rendre
+
+Fichier attendus :
+
+ - [ ]     Masque forêt : masque_foret.tif
+ - [ ]     fichier d'échantillons : Sample_BD_foret_T31TCJ.shp.
+-  script Python :
+ - [ ]         sample_analysis.py
+ - [ ]         pre_traitement.py
+ - [ ]         classification.py
+ - [ ]         my_function.py
+ - [ ]     le rapport final : projet_teledection_sigmaM2_groupXX (pdf ou html)
+ - [ ]     l'ensemble de ces fichiers devra être rassemblé dans une archive zip nommée projet_teledection_sigmaM2_groupXX.zip.
+
+Fichier non attendus mais que produirai grace à votre code :
+
+- Analyse des échantillons :
+ - [ ]         diag_baton_nb_poly_lvlXX (png ou html) ;
+ - [ ]         diag_baton_nb_pix_lvlXX (png ou html) ;
+ - [ ]         temp_mean_ndvi_lvlXX (png ou html) ;
+- Série temporelles :
+ - [ ]         Serie_temp_S2_allbands.tif ;
+ - [ ]         Serie_temp_S2_ndvi.tif ;
+- carte_essences :
+ - [ ]         carte_essences_lvl1.tif ;
+ - [ ]         carte_essences_lvl2.tif ;
+ - [ ]         carte_essences_lvl3.tif ;
+ - [ ]         carte_essences_lvl2_fromlvl3.tif ;
+ - [ ]         carte_essences_lvl1_fromlvl2.tif ;
+  - [ ]        carte_essences_lvl1_fromlvl3.tif.
+
+
+
