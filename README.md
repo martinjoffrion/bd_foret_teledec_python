@@ -1,35 +1,27 @@
 # Verification
-<details>
-<summary>Images</summary>
+## Images
  
- - [ ] des images acquises entre janvier 2021 et février 2022 ;
- - [ ] des images de la tuile T31TCJ 
- - [ ] des images qui ont une couverture de nuages inférieure à 15%
+ - [x] des images acquises entre janvier 2021 et février 2022 ;
+ - [x] des images de la tuile T31TCJ 
+ - [x] des images qui ont une couverture de nuages inférieure à 15%
  - [ ] des images en réflectance (niveau 2A)
- - [ ] une date en hiver ;
-> [!NOTE]
+ - [x] une date en hiver ;
+> [!NOTE]  
 > 25 janvier 2022
- - [ ] quatre dates en automne/printemps, idéalement deux pour chaque saison ;
-> [!NOTE]
-> 17 octobre 2021 (couverture à 17% --> OK)
-> 15 avril 2021
-> 31 mars 2021
-> 16 décembre 2021
- - [ ] une date en été
-> [!NOTE]
+ - [x] quatre dates en automne/printemps, idéalement deux pour chaque saison ;
+> [!NOTE]  
+>  31 mars 2021, 15 avril 2021, 16 décembre 2021 et 17 octobre 2021 (couverture à 17% --> OK), 
+ - [x] une date en été
+> [!NOTE]  
 > 19 juillet 2021
-</details>
 
-<details>
-<summary>pre_traitement.py</summary>
-### Conventions à vérifier
+## pre_traitement.py
+### Conventions/noms fichier à vérifier
 - [ ] Nom du fichier : pre_traitement.py
 - [ ] Fonctions mises dans script my_function.py à part
 - [ ] Nom du fichier : masque_foret.tif
 - [ ] Nom du fichier : Serie_temp_S2_allbands.tif
 - [ ] Nom du fichier : Serie_temp_S2_ndvi.tif 
-
-### Conventions à vérifier
 - [x] Espaces, virgules, ...
 - [x] Structure épurée du code
 
