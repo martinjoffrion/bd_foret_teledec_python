@@ -2,7 +2,7 @@
 """
 Created on Mon Nov 27 09:41:17 2023
 
-@author: dsii
+@author: ducrocq, joffrion et arondel
 """
 
 import os
@@ -11,16 +11,10 @@ from rasterio.mask import mask
 import geopandas as gpd
 from osgeo import gdal
 import matplotlib as plt
-#testcommentaire
 otb_bin_path = os.environ['MYOTB']
-##fonction
 RAM = os.environ['MYRAM']
 
-"""
-        Traitement de la bd foret
-"""
-
-def traitement_forest (bd_foret_path,out_dir):
+def traitement_forest (bd_foret_path, out_dir):
     '''
 
     Parameters
@@ -38,14 +32,10 @@ def traitement_forest (bd_foret_path,out_dir):
         DESCRIPTION.
 
     '''
-    #Open vector file
     foret = gpd.read_file(bd_foret_path)
-    #Identifier les valeurs à supprimer
     valeurs_a_supprimer = ['Lande', 'Formation herbacée']
-    #supprime les valeurs de la bd foret non souhaité
     foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
     foret_filtre = foret_filtre[~foret_filtre['TFV'].str.startswith('Forêt ouverte')]
-    #ajout d'un champs "raster" = 1 pour rasteriser      
     foret_filtre['raster'] = 1 
     foret_filtre.to_file(f'{out_dir}/bd_foret', driver="ESRI Shapefile")
     foret_filtre_path = 'bd_foret/bd_foret.shp'
@@ -69,20 +59,16 @@ def rasterize_shapefile(in_vector, out_image, emprise_etude, field_name, spatial
         DESCRIPTION. integer of the target spatial resolution
 
     '''
-    
     coordonnees_emprise = gpd.read_file(emprise_etude)
     xmin, ymin, xmax, ymax = coordonnees_emprise.total_bounds
     cmd_pattern = ("gdal_rasterize -a {field_name} "
                "-tr {spatial_resolution} {spatial_resolution} "
                "-te {xmin} {ymin} {xmax} {ymax} -ot Byte -of GTiff "
                "{in_vector} {out_image}")
-
-    # fill the string with the parameter thanks to format function
     cmd = cmd_pattern.format(in_vector=in_vector, xmin=xmin, ymin=ymin, xmax=xmax,
                          ymax=ymax, out_image=out_image, field_name=field_name,
                          spatial_resolution=spatial_resolution)
-    
-    os.system(cmd)# execute the command in the terminal
+    os.system(cmd)
 
 
 """
@@ -90,7 +76,7 @@ def rasterize_shapefile(in_vector, out_image, emprise_etude, field_name, spatial
 """
 
 
-def cmd_ExtractROI(input_img,extraction_vector,output_raster):
+def cmd_ExtractROI(input_img, extraction_vector, output_raster):
     '''
 
     Parameters
@@ -105,14 +91,12 @@ def cmd_ExtractROI(input_img,extraction_vector,output_raster):
     None.
 
     '''
-    #découpage du raster selon le fichier emprise
     otbcli_ExtractROI = f'{otb_bin_path}/otbcli_ExtractROI.bat'
     cmd = (f'{otbcli_ExtractROI}  -mode fit -mode.fit.vect {extraction_vector}'
            f' -in {input_img} -out {output_raster} int16 -ram {RAM}')
     os.system(cmd)
 
-
-def cmd_Superimpose(inr,inm,output_raster):
+def cmd_Superimpose(inr, inm, output_raster):
     '''
 
     Parameters
@@ -131,9 +115,8 @@ def cmd_Superimpose(inr,inm,output_raster):
     cmd = (f'{otbcli_Superimpose} -inr {inr} -inm {inm} -interpolator nn'
            f' -out {output_raster} int16 -ram {RAM}')
     os.system(cmd)
-    
 
-def cmd_ConcatenateImages(list_image, output_concat, type = None):
+def cmd_ConcatenateImages(list_image, output_concat, type=None):
     '''
 
     Parameters
@@ -151,8 +134,6 @@ def cmd_ConcatenateImages(list_image, output_concat, type = None):
     '''
     if type == None: type = 'int16'
     list_image_str = ' '.join(list_image)
-    #ou faire plutôt : list_image_str = ['{' + img_name + '}' for img_name in list_image] #pour avoir le format de ce qui est demandé par la fonction OTB
-    #chemin {'chemin_img1'}{'chemin_img2'}etc...
     otbcli_ConcatenateImages = f'{otb_bin_path}/otbcli_ConcatenateImages.bat'
     cmd = (f'{otbcli_ConcatenateImages}  -il {list_image_str}'
            f' -out {output_concat} {type} -ram {RAM}')
@@ -178,8 +159,6 @@ def get_date_f_b_path(str_band_path):
     b_date = b[0]
     return b_date
 
-
-
 def rasterio_ndvi (file_path, red, pir):
     '''
 
@@ -198,10 +177,9 @@ def rasterio_ndvi (file_path, red, pir):
         DESCRIPTION.
 
     '''
-    
     raster = rasterio.open(file_path)
     rdir = os.path.dirname(file_path)
-    rname= os.path.basename(file_path)
+    rname = os.path.basename(file_path)
     
     rouge = raster.read(red)
     nred = raster.read(pir)
@@ -210,12 +188,10 @@ def rasterio_ndvi (file_path, red, pir):
     ndvi = (nred - rouge) / (nred + rouge)
     
     destination_meta = raster.profile
-    # Changement du nombre de bande en sortie (1 seule pour le NDVI)
     destination_meta['count'] = 1
-    # Changement de type de données stockées (de unint16 à float32)
     destination_meta['dtype'] = "float32"
     
-    raster_sortie = rasterio.open(f'{rdir}/ndvi_{rname}','w', **destination_meta)
+    raster_sortie = rasterio.open(f'{rdir}/ndvi_{rname}', 'w', **destination_meta)
     raster_sortie.write(ndvi, 1)
     ndvi_path = f'{rdir}/ndvi_{rname}'
     raster.close
@@ -258,7 +234,7 @@ def apply_mask (fp_in_image,fp_out_image,gdf_mask):
         destination.close()
 
 
-def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
+def reprojection (input_raster, epsg_cible, output_raster, dtype=None):
     '''
     
     Parameters
@@ -279,17 +255,14 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
     '''
     from rasterio.warp import calculate_default_transform, reproject, Resampling
     
-    #open source raster
     srcRst = rasterio.open(input_raster)
     dstCrs = {'init': f'EPSG:{epsg_cible}'}
     
-    #calculate transform array and shape of reprojected raster
     transform, width, height = calculate_default_transform(
             srcRst.crs, dstCrs, srcRst.width, srcRst.height, *srcRst.bounds)
     
-    if dtype==None : dtype=srcRst.read(1).dtype
+    if dtype==None: dtype=srcRst.read(1).dtype
     
-    #Update the destination meta
     dstmeta = srcRst.meta.copy()
     dstmeta.update({
             'crs': dstCrs,
@@ -298,9 +271,7 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
             'height': height,
             'dtype': dtype
         })
-    #open destination raster
     dstRst = rasterio.open(output_raster, 'w', **dstmeta)
-    #reproject and save raster band data
     
     for band in range(1, srcRst.count + 1):
         reproject(
@@ -311,7 +282,6 @@ def reprojection (input_raster, epsg_cible ,output_raster, dtype=None):
             dst_transform=transform,
             dst_crs=dstCrs,
             resampling=Resampling.nearest)
-    #close destination raster
     srcRst.close()
     dstRst.close()
     
