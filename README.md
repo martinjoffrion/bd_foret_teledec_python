@@ -7,8 +7,8 @@
 - [ ] Nom du fichier : Serie_temp_S2_ndvi.tif 
 
 ### Conventions à vérifier
-- [ ] Espaces
-- [ ] Structure épurée du code
+- [x] Espaces, virgules, ...
+- [x] Structure épurée du code
 
 ### A mettre dans la notice utilisation 
 - [ ] Expliquer ce que doit comprendre le dossier avec les données d'entrée 
@@ -17,7 +17,7 @@
 
 ### Masque à partir de la BD_FORET
  - [ ] suppression des polygones de type Lande, Formation Herbacée et de type "forêts ouvertes"
->  Manque les forets ouverts
+>  Manque la suppresion des forets ouverts
  - [ ] format raster GeoTiff ;
  - [ ] encodé en 8 bits ;
  - [ ] même emprise spatiale et résolution spatiale que les images S2 utilisées ;
