@@ -1,4 +1,7 @@
 ## Verification : pre_traitement.py
+<details>
+ 
+</details>
 ### Conventions à vérifier
 - [ ] Nom du fichier : pre_traitement.py
 - [ ] Fonctions mises dans script my_function.py à part
@@ -17,6 +20,7 @@
 
 ### Masque à partir de la BD_FORET
  - [ ] suppression des polygones de type Lande, Formation Herbacée et de type "forêts ouvertes"
+> [!WARNING]
 >  Manque la suppresion des forets ouverts
  - [ ] format raster GeoTiff ;
  - [ ] encodé en 8 bits ;
