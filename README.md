@@ -40,9 +40,7 @@ Fonctionne en 1h38
 - [ ] Préciser les consignes d'éxécution
 
 ### Masque à partir de la BD_FORET
- - [ ] suppression des polygones de type Lande, Formation Herbacée et de type "forêts ouvertes"
-> [!WARNING]
->  Manque la suppresion des forets ouverts
+ - [x] suppression des polygones de type Lande, Formation Herbacée et de type "forêts ouvertes"
  - [x] format raster GeoTiff ;
  - [x] encodé en 8 bits ;
 >  Octet - nombre entier non signé de huit bits
