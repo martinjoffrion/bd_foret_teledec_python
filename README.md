@@ -22,16 +22,17 @@
 > 19 juillet 2021
 
 ## pre_traitement.py
+Fonctionne en 1h38
 ### Conventions/noms fichier à vérifier
-- [ ] Nom du fichier : pre_traitement.py
-- [ ] Fonctions mises dans script my_function.py à part
-- [ ] Nom du fichier : masque_foret.tif
-- [ ] Nom du fichier : Serie_temp_S2_allbands.tif
-- [ ] Nom du fichier : Serie_temp_S2_ndvi.tif 
+- [x] Nom du fichier : pre_traitement.py
+- [x] Fonctions mises dans script my_function.py à part
+- [x] Nom du fichier : masque_foret.tif
+- [x] Nom du fichier : Serie_temp_S2_allbands.tif
+- [x] Nom du fichier : Serie_temp_S2_ndvi.tif 
 - [x] Espaces, virgules, ...
 - [x] Structure épurée du code
-- [ ] suppression de bouts de code résiduels
-- [ ] execution d'un seul tenant
+- [x] suppression de bouts de code résiduels
+- [x] execution d'un seul tenant
 
 ### A mettre dans la notice utilisation 
 - [ ] Expliquer ce que doit comprendre le dossier avec les données d'entrée 
@@ -42,28 +43,78 @@
  - [ ] suppression des polygones de type Lande, Formation Herbacée et de type "forêts ouvertes"
 > [!WARNING]
 >  Manque la suppresion des forets ouverts
- - [ ] format raster GeoTiff ;
- - [ ] encodé en 8 bits ;
- - [ ] même emprise spatiale et résolution spatiale que les images S2 utilisées ;
- - [ ] nom du fichier masque_foret.tif ;
- - [ ] contient les valeurs suivantes : Zone de forêt = valeur du pixel 1 & Zone hors forêt = valeur du pixel 0
+ - [x] format raster GeoTiff ;
+ - [x] encodé en 8 bits ;
+>  Octet - nombre entier non signé de huit bits
+ - [x] même emprise spatiale et résolution spatiale que les images S2 utilisées ;
+> Globalement, les mêmes
+
+| Fichier | Emprise |
+| --- | --- |
+| masque_foret | 501127.9697000000160187,6240654.0235999999567866 : 609757.9697000000160187,6314464.0235999999567866 |
+| Serie_temp_S2_allbands | 501006.0829747776733711,6240658.9746725969016552 : 609757.6257253842195496,6313703.5941410586237907 |
+| Serie_temp_S2_ndvi | 501006.0829747776733711,6240658.9746725969016552 : 609757.6257253842195496,6313703.5941410586237907 |
+
+| Fichier | Résolution spatiale |
+| --- | --- |
+| masque_foret | 10,-10 |
+| Serie_temp_S2_allbands | 10.00474174338606481,-10.00474174338606481 |
+| Serie_temp_S2_ndvi | 10.00474174338606481,-10.00474174338606481|
+ - [x] nom du fichier masque_foret.tif ;
+ - [x] contient les valeurs suivantes : Zone de forêt = valeur du pixel 1 & Zone hors forêt = valeur du pixel 0
 
 ### Production d'une image Serie_temp_S2_allbands.tif
- - [ ] contient les 10 bandes : 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, pour les 6 dates (60 bandes) |
- - [ ] découpée selon l'emprise du fichier emprise_etude.shp
- - [ ] avec un résolution spatiale de 10m ;
- - [ ] projetée selon le système de projection Lambert 93 (EPSG:2154) ;
- - [ ] où les zones de non forêt sont masquées (valeur des pixels = 0) grâce au masque masque_foret.tif que vous avez créé ;
- - [ ] encodée en uint16 (ou uint8 cf remarque ci-après).
- - [ ] Vous nommerez l'image finale Serie_temp_S2_allbands.tif.
+ - [x] contient les 10 bandes : 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, pour les 6 dates (60 bandes) |
+ - [x] découpée selon l'emprise du fichier emprise_etude.shp
+> OK dans le script et QGIS   
+ - [x] avec un résolution spatiale de 10m ;
+ - [x] projetée selon le système de projection Lambert 93 (EPSG:2154) ;
+ - [x] où les zones de non forêt sont masquées (valeur des pixels = 0) ~~grâce au masque masque_foret.tif que vous avez créé~~ ;
+> OK dans QGIS  : interprétation directe comme "sans donnée" --> Bien indiqué comme 'Aucune valeur de données : 0' dans Propriétés de la couche
+
+> pas avec le masque_foret.tif --> prof OK
+ - [x] encodée en uint16 ~~(ou uint8 cf remarque ci-après).~~
+ - [x] Vous nommerez l'image finale Serie_temp_S2_allbands.tif.
 
 ### Production d'une image NDVI Serie_temp_S2_ndvi.tif
- - [ ] découpée selon l'emprise du fichier emprise_etude.shp ;
- - [ ] avec un résolution spatiale de 10m ;
- - [ ] projetée selon le système de projection Lambert 93 (EPSG:2154) ;
- - [ ] où les zones de non forêt sont masquées (valeur des pixels = 0) grâce au masque masque_foret.tif que vous avez créé ;
- - [ ] encodée en float32 (ou float).
- - [ ] Vous nommerez l'image finale Serie_temp_S2_ndvi.tif
+ - [x] découpée selon l'emprise du fichier emprise_etude.shp ;
+> OK dans le script et OK sur QGIS  
+ - [x] avec un résolution spatiale de 10m ;
+ - [x] projetée selon le système de projection Lambert 93 (EPSG:2154) ;
+ - [x] où les zones de non forêt sont masquées (valeur des pixels = 0) ~~grâce au masque masque_foret.tif que vous avez créé~~ ;
+> OK dans QGIS  : interprétation directe comme "sans donnée" --> Bien indiqué comme 'Aucune valeur de données : 0' dans Propriétés de la couche
+
+> pas avec le masque_foret.tif --> prof OK
+ - [x] encodée en float32 (ou float).
+ - [x] Vous nommerez l'image finale Serie_temp_S2_ndvi.tif
+
+## Sample_BD_foret_T31TCJ.shp
+
+ - [ ] les échantillons doivent être inclus dans l'emprise des images S2 que vous allez utiliser (après découpe Cf section Pré-traitement des images);
+ - [x] utilisez uniquement les classes présentes dans la nomenclature du prof
+> utilisation de la nomenclature envoyé par Louis-Marie
+ - [x] certaines classes TFV ne sont pas à prendre en compte pour tous les niveaux. Par exemple, les polygones de la classe Forêt fermée de feuillus purs en îlots ne sont pas à prendre en compte pour le niveau 3 (symbole Ø) mais bien à prendre en compte pour les niveaux 2 et 1 ;
+ - [x] si une classe contient moins de 15 polygones, alors ne la prenez pas en compte.
+> [!WARNING]
+> En découpant avec l'emprise vectorielle, on tombe sur 10729 comme les autres groupes --> MAIS problème pour les diagrammes, ce n'est pas la même emprise entre le masque foret et le shp des échantillons
+
+> [!WARNING]
+> En découpant avec le masque foret, on tombe sur 10749 --> script diagramme opérationnel
+- Comprend les champs : 
+  - [ ] Nom_lvl3 ;
+  - [ ] Code_lvl3 ;
+  - [ ] Nom_lvl2 ;
+  - [ ] Code_lvl2 ;
+  - [ ] Nom_lvl1 ;
+  - [ ] Code_lvl1.
+- Laissez également les attributs déjà présents.
+  - [ ] ID
+  - [ ] CODE_TFV
+  - [ ] TFV
+  - [ ] TFV_G11
+  - [ ] ESSENCE
+- [ ]Nommez le fichier Sample_BD_foret_T31TCJ.shp (si vous utilisez le format shapefile).
+> prof : je regarderai juste le fichier final en contrôlant que tous les attributs soient présents (et corrects) et qu'il y ait le bon nombres de polygones.
 
 ## sample_analysis.py
  - [ ] diag_baton_nb_poly_lvlXX (png ou html) ; x3 (par niveau de nomenclature)
@@ -141,7 +192,7 @@ Fichier non attendus mais que produirai grace à votre code :
  - [ ]         carte_essences_lvl3.tif ;
  - [ ]         carte_essences_lvl2_fromlvl3.tif ;
  - [ ]         carte_essences_lvl1_fromlvl2.tif ;
-  - [ ]        carte_essences_lvl1_fromlvl3.tif.
+ - [ ]        carte_essences_lvl1_fromlvl3.tif.
 
 
 
