@@ -30,6 +30,8 @@
 - [ ] Nom du fichier : Serie_temp_S2_ndvi.tif 
 - [x] Espaces, virgules, ...
 - [x] Structure épurée du code
+- [ ] suppression de bouts de code résiduels
+- [ ] execution d'un seul tenant
 
 ### A mettre dans la notice utilisation 
 - [ ] Expliquer ce que doit comprendre le dossier avec les données d'entrée 
@@ -62,6 +64,53 @@
  - [ ] où les zones de non forêt sont masquées (valeur des pixels = 0) grâce au masque masque_foret.tif que vous avez créé ;
  - [ ] encodée en float32 (ou float).
  - [ ] Vous nommerez l'image finale Serie_temp_S2_ndvi.tif
+
+## sample_analysis.py
+ - [ ] diag_baton_nb_poly_lvlXX (png ou html) ; x3 (par niveau de nomenclature)
+ - [ ] diag_baton_nb_pix_lvlXX (png ou html) ; x3 (par niveau de nomenclature)
+ - [ ] temp_mean_ndvi_lvlXX (png ou html) ; x3 (par niveau de nomenclature)
+
+### Conventions/noms fichier à vérifier
+- [ ] Nom du fichier : sample_analysis.py
+- [ ] Fonctions mises dans script my_function.py à part
+- [ ] Espaces, virgules, ...
+- [ ] Structure épurée du code
+- [ ] suppression de bouts de code résiduels
+- [ ] execution d'un seul tenant
+
+## classification.py
+ - [ ]  faire une classification supervisée avec le classifieur 'RandomForestClassifier' de scikit learn en utilisant les hyperparamètres :
+
+| Paramètre | Valeur |
+| --- | --- |
+| max_depth | 20* |
+| oob_score | True |
+| max_samples | 0.75 |
+| class_weight | balanced |
+| N_estimators | 	Valeur par défaut** |
+
+> Utilisez la valeur par défaut pour les hyperparamètres qui ne figurent pas dans le tableau. Si la classification prend trop de temps passez à (*) 10, à (**) 50 voire 10.
+Stratégie de validation.
+
+### validation croisée à 5 folds qui est soit :
+ - [ ]  stratifiée (projet évalué sur 16) ;
+ - [ ]   stratifiée et qui prend en compte l'appartenance des pixels à un polygone (projet évalué sur 18) ;
+ - [ ]  stratifiée et qui prend en compte l'appartenance des pixels à un polygone, répétée 30 fois avec résultats moyennées (projet évalué sur 20).
+
+### production d'images
+ - [ ]  carte_essences_lvl1.tif ;
+ - [ ]  carte_essences_lvl2.tif ;
+ - [ ]  carte_essences_lvl3.tif ;
+ - [ ]  carte_essences_lvl2_fromlvl3.tif ;
+ - [ ]  carte_essences_lvl1_fromlvl2.tif ;
+ - [ ] carte_essences_lvl1_fromlvl3.tif
+
+## my_function.py
+ - [ ]   ajout des commentaires "" ""
+ - [ ]   suppression des commentaires en #
+ - [ ]   
+
+
 
 # Fichiers à rendre
 
