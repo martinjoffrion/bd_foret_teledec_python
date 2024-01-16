@@ -1,4 +1,10 @@
 # Verification
+
+## Questions pour le prof : 
+
+- pour le masque_foret.tif, il doit apparaitre déjà créé dans le dossier final ?
+- envoyer les images dézippées dans le dossier final ?
+
 ## Images
  
  - [x] des images acquises entre janvier 2021 et février 2022 ;
