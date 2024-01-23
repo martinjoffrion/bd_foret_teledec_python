@@ -117,7 +117,7 @@ for niv in range(1,4) : # répétition de la boucle 3 fois
     t_df = pd.DataFrame({'Coord_lignes':t[0],'Coord_col':t[1]})
 
     # Jointure entre les coordonnées (t) de l'image et celles du df 'all_groups' pour ne garder que celles correspondantes
-    grps_niv = t_df.merge(all_groups, how="left", on=["Lignes", "Col"])
+    grps_niv = t_df.merge(all_groups, how="left", on=["Coord_lignes", "Coord_col"])
     
     # Transformation en array pour la suite (StratifiedGroupKFold)
     grps_niv = grps_niv["id_groupe_polyg"].to_numpy()
