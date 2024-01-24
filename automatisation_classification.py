@@ -133,7 +133,7 @@ for niv in range(1,4) : # répétition de la boucle 3 fois
 ########### --- StratifiedGroupKFold
 
     kf = StratifiedGroupKFold(n_splits=nb_folds, shuffle=True)
-    for train, test in kf.split(X, Y, groups=groups):
+    for train, test in kf.split(X, Y, groups=grps_niv):
         X_train, X_test = X[train], X[test]
         Y_train, Y_test = Y[train], Y[test]
 
