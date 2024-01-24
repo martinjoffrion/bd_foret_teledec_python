@@ -4,12 +4,6 @@ Les deux images finales du script pre_traitement.py : https://filesender.renater
 L'image raster sample_id + le shp Sample_BD_foret_T31TCJ : https://filesender.renater.fr/?s=download&token=699b606c-4ce8-4963-b28d-81f9000bb9a6
 
 # Verification
-
-## Questions pour le prof : 
-
-- pour le masque_foret.tif, il doit apparaitre déjà créé dans le dossier final ?
-- envoyer les images dézippées dans le dossier final ?
-
 ## Images
  
  - [x] des images acquises entre janvier 2021 et février 2022 ;
