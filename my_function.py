@@ -327,3 +327,27 @@ def create_polygons_bar_charts(shapefile_path, column_names, save_path_template)
         # Afficher le graphique si nécessaire
         plt.show()
 
+def cmd_Rasterization(sample_bdforet_filename, out_sample_filename, image_filename, field_name):
+
+    otbcli_Rasterization = f'{otb_bin_path}/otbcli_Rasterization.bat'
+    cmd = (f'{otbcli_Rasterization} -in {sample_bdforet_filename} '
+           f' -out {out_sample_filename} -im {image_filename} -mode attribute ' 
+           f' -mode.attribute.field {field_name}')
+    os.system(cmd)
+
+
+### Fonctions du cours
+def report_from_dict_to_df(dict_report):
+    # convert report into dataframe
+    report_df = pd.DataFrame.from_dict(dict_report)
+
+    # drop unnecessary rows and columns
+    try :
+        report_df = report_df.drop(['accuracy', 'macro avg', 'weighted avg'], axis=1)
+    except KeyError:
+        print(dict_report)
+        report_df = report_df.drop(['micro avg', 'macro avg', 'weighted avg'], axis=1)
+
+    report_df = report_df.drop(['support'], axis=0)
+    
+    return report_df
