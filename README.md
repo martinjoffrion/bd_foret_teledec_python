@@ -1,7 +1,7 @@
 # Lien téléchargement
-
-Les deux images finales du script pre_traitement.py : https://filesender.renater.fr/?s=download&token=60796c71-1347-45f6-84ce-a213a76152f9
-L'image raster sample_id + le shp Sample_BD_foret_T31TCJ : https://filesender.renater.fr/?s=download&token=699b606c-4ce8-4963-b28d-81f9000bb9a6
+- Lien pour les deux images (suppression de 2 dates + supp bandes bleues (B2) + supp B8A) : https://filesender.renater.fr/?s=download&token=b1114200-644a-40de-bf34-5b8fdf9c67b8
+- Les deux images finales du script pre_traitement.py : https://filesender.renater.fr/?s=download&token=60796c71-1347-45f6-84ce-a213a76152f9
+- L'image raster sample_id + le shp Sample_BD_foret_T31TCJ : https://filesender.renater.fr/?s=download&token=699b606c-4ce8-4963-b28d-81f9000bb9a6
 
 # Verification
 ## Images
