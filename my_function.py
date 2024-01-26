@@ -293,43 +293,6 @@ def reprojection (input_raster, epsg_cible, output_raster, dtype=None):
 def warp( in_img,out_img,code_epsg):
     gdal.Warp (out_img, in_img, dstSRS=f'EPSG:{code_epsg}') 
 
-#Création des digrammes du nombre de polygones par classe 
-def create_polygons_bar_charts(shapefile_path, column_names, save_path_template):
-    # Charger le shapefile
-    gdf = gpd.read_file(shapefile_path)
-
-    for column_name in column_names:
-        # Extrait le numéro de la colonne (assumant que le format est "Code_lvlXX")
-        column_number = ''.join(filter(str.isdigit, column_name))
-
-        # Compter le nombre de polygones par valeur de la colonne spécifiée
-        count_by_column = gdf[column_name].value_counts()
-
-        # Créer le graphique
-        plt.figure(figsize=(10, 6))
-        ax = count_by_column.plot(kind='bar', color='darkgreen')
-        plt.title(f'Nombre de Polygones par {column_name}')
-        plt.xlabel(column_name)
-        plt.ylabel('Nombre de Polygones')
-        plt.xticks(rotation=45, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
-        plt.tight_layout()
-
-        # Ajouter une légende
-        plt.legend(['Nombre de Polygones'], loc='upper right')
-
-        # Ajouter une grille à l'arrière
-        plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-        # Annoter chaque barre avec sa valeur
-        for i, v in enumerate(count_by_column):
-            ax.text(i, v + 0.1, str(v), ha='center', va='bottom', fontsize=8)
-
-        # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
-        save_path = save_path_template.format(column_number=column_number)
-        plt.savefig(save_path)
-
-        # Afficher le graphique si nécessaire
-        plt.show()
 
 def cmd_Rasterization(sample_bdforet_filename, out_sample_filename, image_filename, field_name):
 
@@ -464,6 +427,137 @@ def report_from_dict_to_df(dict_report):
         print(dict_report)
         report_df = report_df.drop(['micro avg', 'macro avg', 'weighted avg'], axis=1)
 
+    
     report_df = report_df.drop(['support'], axis=0)
     
     return report_df
+
+
+
+
+def create_polygons_bar_charts(shapefile_path, column_names, save_path_template):
+    # Charger le shapefile
+    gdf = gpd.read_file(shapefile_path)
+
+    for column_name in column_names:
+        # Extrait le numéro de la colonne (assumant que le format est "Code_lvlXX")
+        column_number = ''.join(filter(str.isdigit, column_name))
+
+        # Compter le nombre de polygones par valeur de la colonne spécifiée
+        count_by_column = gdf[column_name].value_counts()
+
+        # Créer le graphique
+        plt.figure(figsize=(10, 6))
+        ax = count_by_column.plot(kind='bar', color='darkgreen')
+        plt.title(f'Nombre de Polygones par {column_name}')
+        plt.xlabel(column_name)
+        plt.ylabel('Nombre de Polygones')
+        plt.xticks(rotation=45, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
+        plt.tight_layout()
+
+        # Ajouter une légende
+        plt.legend(['Nombre de Polygones'], loc='upper right')
+
+        # Ajouter une grille à l'arrière
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Annoter chaque barre avec sa valeur
+        for i, v in enumerate(count_by_column):
+            ax.text(i, v + 0.1, str(v), ha='center', va='bottom', fontsize=8)
+
+        # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
+        save_path = save_path_template.format(column_number=column_number)
+        plt.savefig(save_path)
+
+        # Afficher le graphique si nécessaire
+        plt.show()
+
+
+
+
+def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, save_path_template2):
+    # Charger le GeoDataFrame à partir du shapefile
+    gdf = gpd.read_file(shapefile_path)
+
+    for class_column in column_names:
+        # Extrait le numéro de la colonne (assumant que le format est "Code_lvlXX")
+        column_number = ''.join(filter(str.isdigit, class_column))
+        # Calculer les statistiques zonales pour chaque polygone
+        stats = zonal_stats(gdf.geometry, raster_path, stats='count', all_touched=True)
+
+        # Extraire le nombre de pixels de chaque statistique et l'ajouter à une nouvelle colonne
+        pixel_counts = [stat['count'] for stat in stats]
+        gdf['nb_pixels'] = pixel_counts
+
+        # Grouper le GeoDataFrame par la classe et calculer la somme des pixels
+        pixel_sum_per_class = gdf.groupby(class_column)['nb_pixels'].sum()
+
+        # Créer le graphique à barres
+        plt.figure(figsize=(10, 6))
+        ax = pixel_sum_per_class.plot(kind='bar', color='blue')  # Ajout de la bordure noire
+        plt.title(f'Somme du Nombre de Pixels par {class_column}')
+        plt.xlabel(class_column)
+        plt.xticks(rotation=45, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
+        plt.ylabel('Somme du Nombre de Pixels')
+
+        # Ajouter une grille à l'arrière
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Ajouter les valeurs de chaque colonne au-dessus des colonnes avec une marge réduite
+        for p in ax.patches:
+            height = p.get_height()
+            width = p.get_width()
+            if height > 0:
+                ax.annotate(str(int(height)),
+                            (p.get_x() + width / 2., height),
+                            ha='center', va='bottom')
+
+        # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
+        save_path = save_path_template2.format(column_number=column_number)
+        plt.savefig(save_path)
+
+        # Afficher le graphique
+        plt.tight_layout()
+        plt.show()
+        
+   
+     
+  def generate_temporal_signature_plot(my_folder, image_filename, sample_filename, output_folder, sample_name, band_names):
+    # Get samples from ROI
+    dict_X, dict_Y, dict_t = get_samples_from_roi(image_filename, sample_filename, output_fmt="by_label")
+
+    # Plotting
+    fig = go.Figure()
+
+    for label, X in dict_X.items():
+        # Calculate mean and standard deviation along the time axis
+        mean_ndvi = np.mean(X, axis=0)
+        std_ndvi = np.std(X, axis=0)
+
+        # Plotting mean NDVI with shaded standard deviation
+        fig.add_trace(go.Scatter(x=band_names,
+                                 y=mean_ndvi,
+                                 mode='lines',
+                                 line=dict(color=f'rgb({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)})'),
+                                 name=f'Class {label}'))
+
+        fig.add_trace(go.Scatter(x=band_names + band_names[::-1],
+                                 y=list(mean_ndvi - std_ndvi) + list((mean_ndvi + std_ndvi)[::-1]),
+                                 fill='toself',
+                                 fillcolor=f'rgba({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)}, 0.3)',
+                                 line=dict(color='rgba(255,255,255,0)'),
+                                 showlegend=False))
+
+    # Update layout for a single-column legend
+    fig.update_layout(title=f'Signature temporelle de la moyenne et écart type du ndvi pour le niveau {sample_name}',
+                      xaxis_title='Bands',
+                      yaxis_title='NDVI',
+                      legend=dict(orientation="v", x=1.05, y=1.0),
+                      showlegend=True)
+
+    # Save the plot with the sample name in the filename
+    output_filename = os.path.join(output_folder, f'temp_mean_ndvi_lvl{sample_name}.html')
+    fig.write_html(output_filename)
+    # Afficher le graphique
+    plt.tight_layout()
+    plt.show()
