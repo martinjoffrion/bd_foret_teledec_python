@@ -4,13 +4,12 @@ Created on Sun Nov 26 15:29:41 2023
 
 @author: joffrion, ducrocq et arondel
 """
-################################################
-########### CHEMINS D'ACCES A RENSEIGNER
-################################################
+###############################################################################
+##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
+###############################################################################
 
 # --- Chemin d'accès du dossier rendu dézippé :
-# Exemple : working_directory ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4'
-working_directory ='le/chemin/vers/projet_teledection_sigmaM2_group4'
+working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4'
 
 #!pip install --update rasterio
 import glob
@@ -20,32 +19,27 @@ import os
 os.chdir(working_directory)
 
 # --- Mettre le chemin d'accès du dossier OTB-8.1.2/bin :
-# Exemple : os.environ['MYOTB'] = 'C:/Users/clair/Documents/OTB-8.1.2-Win64/bin'
 os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
 
 os.environ['MYRAM'] = '8000'
 import my_function as f
 
 # --- Chemin d'accès du dossier qui comprendra les résultats intermédiaires et les images concaténées par date :
-# Exemple : working_directory ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/traitement'
 working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
 
 # --- Chemin d'accès du dossier comprenant les données d'entrée :
-# Exemple : data_path ='C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set'
-data_path ='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
+data_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
 
 # --- Chemin d'accès du fichier shapefile de la base de données BD_FORET :
-# Exemple : bd_foret='C:/Users/clair/Documents/projet_teledetection_python/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
-bd_foret='le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
+bd_foret = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/FORMATION_VEGETALE.shp'
 
 # --- Chemin d'accès du fichier shapefile de l'emprise d'étude :
-# Exemple : roi = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
 roi = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/emprise_etude.shp'
 
 
-################################################
-########### NE PAS CHANGER LES VALEURS
-################################################
+###############################################################################
+##----------------------------- PRE-TRAITEMENT ------------------------------##
+###############################################################################
 
 # --- Répertoire de travail actuel 
 os.chdir(working_directory)
@@ -99,7 +93,7 @@ list_ndvi_path = []
 for subfil in range(len(files)):
     
     # liste des bandes recherchées
-    list_band = ['B2','B3','B4','B5','B6','B7','B8','B8A','B11','B12']
+    list_band = ['B3','B4','B5','B6','B7','B8','B11','B12']
     # créer une liste vide pour le nom de futurs fichiers par bande
     list_band_name = []
     for i in range (len(list_band)):
@@ -128,10 +122,10 @@ for subfil in range(len(files)):
     dict_band = {list_band[i]: list_bande_cut[i] for i in range(len(list_band))}   
     
     # créer la liste des bandes à 20m de résolution
-    list_bande_20m_plus = [dict_band.get(x) for x in ['B5','B6','B7','B8A','B11','B12']]
+    list_bande_20m_plus = [dict_band.get(x) for x in ['B5','B6','B7','B11','B12']]
     
     # créer la liste des bandes à 10m de résolution
-    list_band_10m = [dict_band.get(x) for x in ['B2','B3','B4','B8']]
+    list_band_10m = [dict_band.get(x) for x in ['B3','B4','B8']]
     
     # créer une liste vide pour le chemin d'accès des futurs fichiers générés après le rééchantillonnage
     list_bande_finale = []
@@ -152,7 +146,7 @@ for subfil in range(len(files)):
 ########### --- Concaténation 
 
     # appel de la fonction get_date_f_b_path
-    date =  f.get_date_f_b_path(list_bande_finale[0]) # recupération la date de la première bande
+    date = f.get_date_f_b_path(list_bande_finale[0]) # recupération la date de la première bande
     output_concat = f'{ifwdir}/output_{date}_date.tif'
     # appel de la fonction cmd_ConcatenateImages
     f.cmd_ConcatenateImages(list_bande_finale, output_concat)
