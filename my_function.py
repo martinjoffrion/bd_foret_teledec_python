@@ -17,6 +17,8 @@ import matplotlib as plt
 otb_bin_path = os.environ['MYOTB']
 ##fonction
 RAM = os.environ['MYRAM']
+import plotly.graph_objects as go
+from rasterstats import zonal_stats
 
 def traitement_forest (bd_foret_path, out_dir):
     '''
