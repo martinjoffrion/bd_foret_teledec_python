@@ -93,12 +93,12 @@ list_ndvi_path = []
 for subfil in range(len(files)):
     
     # liste des bandes recherchées
-    list_band = ['B3','B4','B5','B6','B7','B8','B11','B12']
+    list_band = ['B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B11', 'B12']
     # créer une liste vide pour le nom de futurs fichiers par bande
     list_band_name = []
     for i in range (len(list_band)):
         result = glob.glob(F"{files[subfil]}/*FRE_{list_band[i]}.tif")
-        if result == [] : result.append( ' ')
+        if result == [] : result.append(' ')
         band = result[0]
         list_band_name.append(band)
     
@@ -115,17 +115,17 @@ for subfil in range(len(files)):
         band_name = os.path.basename(input_img)
         output_raster = f'{iwdir}/cut{band_name}'
         # appel de la fonction cmd_ExtractROI
-        f.cmd_ExtractROI(input_img,new_emprise,output_raster)
+        f.cmd_ExtractROI(input_img, new_emprise, output_raster)
         list_bande_cut.append(output_raster)
         
     # convertir les "lists" en "dictionary"
     dict_band = {list_band[i]: list_bande_cut[i] for i in range(len(list_band))}   
     
     # créer la liste des bandes à 20m de résolution
-    list_bande_20m_plus = [dict_band.get(x) for x in ['B5','B6','B7','B11','B12']]
+    list_bande_20m_plus = [dict_band.get(x) for x in ['B5', 'B6', 'B7', 'B11', 'B12']]
     
     # créer la liste des bandes à 10m de résolution
-    list_band_10m = [dict_band.get(x) for x in ['B3','B4','B8']]
+    list_band_10m = [dict_band.get(x) for x in ['B3', 'B4', 'B8']]
     
     # créer une liste vide pour le chemin d'accès des futurs fichiers générés après le rééchantillonnage
     list_bande_finale = []
