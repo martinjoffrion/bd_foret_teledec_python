@@ -62,7 +62,7 @@ foret_filtre_path = f'{iwdir}/{foret_filtre_path}'
 out_image = 'masque_foret.tif'
 field = 'raster' # champ necessaire à la rasterisation
 # appel de la fonction rasterize_shapefile
-f.rasterize_shapefile(foret_filtre_path, out_image, roi,field, 10)
+f.rasterize_shapefile(foret_filtre_path, out_image, roi, field, 10)
 
 ########### --- Vérification du système de projection
 
@@ -154,8 +154,8 @@ for subfil in range(len(files)):
     
 ########### --- NDVI
 
-    # appel de la fonction rasterio_ndvi
-    ndvi_path = f.rasterio_ndvi(output_concat,3,4)
+    # appel de la fonction rasterio_ndvi (la B2 correspond à la B4 (rouge) et la B3 à la B5 (infrarouge) 
+    ndvi_path = f.rasterio_ndvi(output_concat, 2, 3)
     list_ndvi_path.append(ndvi_path)
 
 ########### --- Concaténation finale des 6 dates
