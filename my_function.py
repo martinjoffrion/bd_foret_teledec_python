@@ -1027,16 +1027,6 @@ def plot_cm(cm, labels, out_filename=None):
     ax1.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
                        prod_acc_label='Precision')
     ax1.add_f1()
-    '''    pltCm = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
-
-        pltCm.add_text(font_size=12)
-        pltCm.add_x_labels(labels, rotation=45)
-        pltCm.add_y_labels(labels)
-        pltCm.color_diagonal(diag_color=colorMap.YlGn,
-                             matrix_color=colorMap.Reds)
-        pltCm.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
-                           prod_acc_label='Precision')
-        pltCm.add_f1()'''
     if out_filename:
         plt.savefig(out_filename, bbox_inches='tight')
 
