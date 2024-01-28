@@ -51,7 +51,7 @@ iwdir = f'{working_directory}/intermediate_result_4b'
 
 ########### --- Rasterisation des échantillons (Sample_BD_foret_T31TCJ.shp)
 
-sample_bdforet = 'data/Sample_BD_foret_T31TCJ.shp'
+sample_bdforet = 'data/sample_div/Sample_BD_foret_T31TCJ_div2.shp'
 
 image_filename = 'data/Serie_temp_S2_4bands.tif'
 
@@ -134,6 +134,8 @@ for niv in range(len(nomencalture)) :
     
     ## Extraction des échantillons :
     X, Y, t = f.get_samples_from_roi(image_filename, sample_filename_niv)
+    ## Correct Y shape
+    Y = Y.reshape(-1)
     
     ## Création d'un dataframe avec les coordonnées de l'image
     t_df = pd.DataFrame({'Coord_lignes':t[0],'Coord_col':t[1]})
@@ -145,7 +147,7 @@ for niv in range(len(nomencalture)) :
     grps_niv = grps_niv["id_groupe_polyg"].to_numpy()
     
     ## Paramètres pour la StratifiedGroupKFold
-    nb_iter = 1 # pour la vf, mettre 30 itérations
+    nb_iter = 3 # pour la vf, mettre 30 itérations
     nb_folds = 5
     
     list_cm = []
