@@ -984,6 +984,7 @@ def agg_metrics (list_cm ,list_accuracy, list_report) :
     
     return mean_cm , mean_accuracy , std_accuracy ,mean_df_report , std_df_report
 
+
 ############# plots
 
 """
@@ -998,40 +999,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-def custom_bg(ax, x_label=None, y_label=None, fontsize=18, labelsize=14,
-              x_grid=True, y_grid=True, minor=True):
-
-    ax.set_facecolor('ivory')
-
-    # custom label
-    x_label = ax.get_xlabel() if not x_label else x_label
-    ax.set_xlabel(x_label, fontdict={'fontname': 'Sawasdee'}, fontsize=fontsize)
-    y_label = ax.get_ylabel() if not y_label else y_label
-    ax.set_ylabel(y_label, fontdict={'fontname': 'Sawasdee'}, fontsize=fontsize)
-
-    # custom border
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-    ax.tick_params(axis='x', colors='darkslategrey', labelsize=labelsize)
-    ax.tick_params(axis='y', colors='darkslategrey', labelsize=labelsize)
-
-    # custom grid
-    if minor:
-        ax.minorticks_on()
-    if y_grid:
-        ax.yaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
-                      linewidth=0.5, zorder=1)
-        ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
-                      linewidth=0.3, zorder=1)
-    if x_grid:
-        ax.xaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
-                      linewidth=0.5, zorder=1)
-
-        ax.xaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
-                      linewidth=0.3, zorder=1)
-    return ax
 
 def plot_cm(cm, labels, out_filename=None):
     """
@@ -1047,153 +1014,60 @@ def plot_cm(cm, labels, out_filename=None):
     out_filename : str (optional)
         If indicated, the chart is saved at the `out_filename` location
     """
-
-    pltCm = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
-
-    pltCm.add_text(font_size=12)
-    pltCm.add_x_labels(labels, rotation=45)
-    pltCm.add_y_labels(labels)
-    pltCm.color_diagonal(diag_color=colorMap.YlGn,
+    fig1, ax1 = plt.subplots(figsize=(16, 12))
+    ax1.set_frame_on(False)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    ax1 = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
+    ax1.add_text(font_size=12)
+    ax1.add_x_labels(labels, rotation=45)
+    ax1.add_y_labels(labels)
+    ax1.color_diagonal(diag_color=colorMap.YlGn,
                          matrix_color=colorMap.Reds)
-    pltCm.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
+    ax1.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
                        prod_acc_label='Precision')
-    pltCm.add_f1()
+    ax1.add_f1()
+    '''    pltCm = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
+
+        pltCm.add_text(font_size=12)
+        pltCm.add_x_labels(labels, rotation=45)
+        pltCm.add_y_labels(labels)
+        pltCm.color_diagonal(diag_color=colorMap.YlGn,
+                             matrix_color=colorMap.Reds)
+        pltCm.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
+                           prod_acc_label='Precision')
+        pltCm.add_f1()'''
     if out_filename:
         plt.savefig(out_filename, bbox_inches='tight')
 
 
-def plot_class_quality(report, accuracy, out_filename=None):
-    """
-    Display a plot bar of quality metrics of each class.
+def plot_class_metrics (mean_oa,std_oa,mean_report,std_report,out_qualite):
+    '''
 
     Parameters
     ----------
-    report : dict
-        Classification report (output of the `classification_report` function
-        of scikit-learn.
-    accuracy : float
-        Overall accuracy.
-    out_filename : str (optional)
-        If indicated, the chart is saved at the `out_filename` location
-    """
-    report_df = pd.DataFrame.from_dict(report)
-    # drop columns (axis=1) same as numpy
-    try :
-        report_df = report_df.drop(['accuracy', 'macro avg', 'weighted avg'],
-                                   axis=1)
-    except KeyError:
-        report_df = report_df.drop(['macro avg', 'weighted avg'],
-                                   axis=1)
-    # drop rows (axis=0) same as numpy
-    report_df = report_df.drop(['support'], axis=0)
-    fig, ax = plt.subplots(figsize=(10, 7))
-    ax = report_df.T.plot.bar(ax=ax, zorder=2)
+    mean_oa : TYPE
+        DESCRIPTION.
+    std_oa : TYPE
+        DESCRIPTION.
+    mean_report : TYPE
+        DESCRIPTION.
+    std_report : TYPE
+        DESCRIPTION.
+    out_qualite : TYPE
+        DESCRIPTION.
 
-    # custom : information
-    ax.text(0.05, 0.95, 'OA : {:.2f}'.format(accuracy), fontsize=14)
-    ax.set_title('Class quality estimation')
+    Returns
+    -------
+    None.
 
-    # custom : cuteness
-    # background color
-    ax.set_facecolor('ivory')
-    # labels
-    x_label = ax.get_xlabel()
-    ax.set_xlabel(x_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-    y_label = ax.get_ylabel()
-    ax.set_ylabel(y_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-    # borders
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-    ax.tick_params(axis='x', colors='darkslategrey', labelsize=14)
-    ax.tick_params(axis='y', colors='darkslategrey', labelsize=14)
-    # grid
-    ax.minorticks_on()
-    ax.yaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
-                  linewidth=0.5, zorder=1)
-    ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
-                  linewidth=0.3, zorder=1)
-    if out_filename:
-        plt.savefig(out_filename, bbox_inches='tight')
-
-
-def plot_mean_class_quality(list_df_report, list_accuracy, out_filename=None):
-    """
-    Display a plot bar of quality metrics of each class.
-
-    Parameters
-    ----------
-    report : dict
-        Classification report (output of the `classification_report` function
-        of scikit-learn.
-    accuracy : float
-        Overall accuracy.
-    out_filename : str (optional)
-        If indicated, the chart is saved at the `out_filename` location
-    """
-
-    # compute mean of accuracy
-    array_accuracy = np.asarray(list_accuracy)
-    mean_accuracy = array_accuracy.mean()
-    std_accuracy = array_accuracy.std()
-
-    array_report = np.array(list_df_report)
-    mean_report = array_report.mean(axis=0)
-    std_report = array_report.std(axis=0)
-    a_report = list_df_report[0]
-    mean_df_report = pd.DataFrame(mean_report, index=a_report.index,
-                                  columns=a_report.columns)
-    std_df_report = pd.DataFrame(std_report, index=a_report.index,
-                                 columns=a_report.columns)
-
-    fig, ax = plt.subplots(figsize=(10, 7))
-    ax = mean_df_report.T.plot.bar(ax=ax,
-                                   yerr=std_df_report.T, zorder=2)
-    # custom : information
-    ax.set_ylim(0.5, 1)
-    ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(mean_accuracy,
-                                                      std_accuracy),
-            fontsize=14)
-    ax.set_title('Class quality estimation')
-
-    # custom : cuteness
-    # background color
-    ax.set_facecolor('ivory')
-    # labels
-    x_label = ax.get_xlabel()
-    ax.set_xlabel(x_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-    y_label = ax.get_ylabel()
-    ax.set_ylabel(y_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-    # borders
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-    ax.tick_params(axis='x', colors='darkslategrey', labelsize=14)
-    ax.tick_params(axis='y', colors='darkslategrey', labelsize=14)
-    # grid
-    ax.minorticks_on()
-    ax.yaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
-                  linewidth=0.5, zorder=1)
-    ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
-                  linewidth=0.3, zorder=1)
-    if out_filename:
-        plt.savefig(out_filename, bbox_inches='tight')
-
-
-def display_metrics (list_metrics,label, out_matrix, out_qualite):
-    
-    # Display confusion matrix
-    plot_cm(list_metrics[0], list_metrics[3].columns.values)
-    plt.savefig(out_matrix, bbox_inches='tight')
-
+    '''
     # Display class metrics
     fig, ax = plt.subplots(figsize=(10, 7))
-    ax = list_metrics[3].T.plot.bar(ax=ax, yerr=list_metrics[4].T, zorder=2)
+    ax = mean_report.T.plot.bar(ax=ax, yerr=std_report.T, zorder=2)
     ax.set_ylim(0.5, 1)
-    _ = ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(list_metrics[1],
-                                                          list_metrics[2]),
+    _ = ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(mean_oa,
+                                                          std_oa),
                 fontsize=14)
     ax.set_title('Class quality estimation')
 
@@ -1219,3 +1093,13 @@ def display_metrics (list_metrics,label, out_matrix, out_qualite):
     ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
                   linewidth=0.3, zorder=1)
     plt.savefig(out_qualite, bbox_inches='tight')
+
+def display_metrics (list_metrics, out_matrix, out_qualite):
+
+    # Display confusion matrix
+    plot_cm(list_metrics[0], list_metrics[3].columns.values,out_matrix)
+    #plt.savefig(out_matrix, bbox_inches='tight')
+    
+    plot_class_metrics(list_metrics[1],list_metrics[2],
+                       list_metrics[3],list_metrics[4],
+                       out_qualite)

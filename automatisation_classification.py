@@ -270,69 +270,38 @@ for niv in range(len(nomencalture)) :
 
         
     #Display Metrics by class
-    
-    
-    def display_metrics (list_metrics, out_matrix, out_qualite):
-        
-        # Display confusion matrix
-        f.plot_cm(list_metrics[0], list_metrics[3].columns.values)
-        plt.savefig(out_matrix, bbox_inches='tight')
 
-        # Display class metrics
-        fig, ax = plt.subplots(figsize=(10, 7))
-        ax = list_metrics[3].T.plot.bar(ax=ax, yerr=list_metrics[4].T, zorder=2)
-        ax.set_ylim(0.5, 1)
-        _ = ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(list_metrics[1],
-                                                              list_metrics[2]),
-                    fontsize=14)
-        ax.set_title('Class quality estimation')
-
-        # custom : cuteness
-        # background color
-        ax.set_facecolor('ivory')
-        # labels
-        x_label = ax.get_xlabel()
-        ax.set_xlabel(x_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-        y_label = ax.get_ylabel()
-        ax.set_ylabel(y_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
-        # borders
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.spines["bottom"].set_visible(False)
-        ax.spines["left"].set_visible(False)
-        ax.tick_params(axis='x', colors='darkslategrey', labelsize=14)
-        ax.tick_params(axis='y', colors='darkslategrey', labelsize=14)
-        # grid
-        ax.minorticks_on()
-        ax.yaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
-                      linewidth=0.5, zorder=1)
-        ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
-                      linewidth=0.3, zorder=1)
-        plt.savefig(out_qualite, bbox_inches='tight')
 
     if field_name == nomencalture[0]:
         f.display_metrics(list_metrics_lvl1, 
                         'Cm_Code_lvl1', 
                         'Cl_Code_lvl1')
+        plt.pause(10)
 
     if field_name == nomencalture[1]:
-        f.display_metrics(list_metrics_lvl2,
-                        'Cm_Code_lvl2', 
-                        'Cl_Code_lvl2')
         f.display_metrics(list_metrics_lvl1_fromlvl2,
                         'Cm_Code_lvl1_fromlvl2', 
                         'Cl_Code_lvl1_fromlvl2')
+        plt.pause(10)
+        f.display_metrics(list_metrics_lvl2,
+                        'Cm_Code_lvl2', 
+                        'Cl_Code_lvl2')
+
 
     if field_name == nomencalture[2]:
-        f.display_metrics(list_metrics_lvl3,
-                        'Cm_Code_lvl3', 
-                        'Cl_Code_lvl3')
-        f.display_metrics(list_metrics_lvl2_fromlvl3,
-                        'Cm_Code_lvl2_fromlvl3', 
-                        'Cl_Code_lvl2_fromlvl3')
         f.display_metrics(list_metrics_lvl1_fromlvl3,
                         'Cm_Code_lvl1_fromlvl3', 
                         'Cl_Code_lvl1_fromlvl3')
+        plt.pause(10)
+        f.display_metrics(list_metrics_lvl2_fromlvl3,
+                        'Cm_Code_lvl2_fromlvl3', 
+                        'Cl_Code_lvl2_fromlvl3')
+        plt.pause(10)
+        list_metrics_lvl3[0] = list_metrics_lvl3[0].astype(int)
+        f.display_metrics(list_metrics_lvl3,
+                        'Cm_Code_lvl3', 
+                        'Cl_Code_lvl3')
+
     
 
     # Classification
@@ -394,4 +363,15 @@ Metrics_summerize = pd.DataFrame({
                                 'lvl1_fromlvl2':list_metrics_lvl1_fromlvl2,
                                 })
 Metrics_summerize.to_csv('Metrics_summerize.csv')
+
+
+
+
+
+
+
+
+
+
+
 
