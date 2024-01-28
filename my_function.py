@@ -16,8 +16,6 @@ import matplotlib as plt
 import plotly.graph_objects as go
 from rasterstats import zonal_stats
 import sys
-import classification as cla
-import read_and_write as rw
 #testcommentaire
 otb_bin_path = os.environ['MYOTB']
 ##fonction
