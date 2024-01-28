@@ -13,9 +13,9 @@ import os
 
 # Charger le shapefile avec GeoPandas
 shapefile_path = 'D:/Cours_M2/Teledetecion_python/traitements/data/bd_foret2.shp'
-gdf = gpd.read_file(shapefile_path)
-column_name = ['Code_lvl1','Code_lvl2','Code_lvl3']
+column_name = ['Nom_lvl1','Nom_lvl2','Nom_lvl3']
 save_path_template = 'D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/diag_baton_nb_poly_lvl{column_number}.png'
+
 
 #Création des 3 premiers diagrammes : compter le nombre de polygone par classe
 create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
@@ -30,15 +30,14 @@ generate_pixel_count_diagrams(shapefile_path, column_name, raster_path, save_pat
 
 
 
-#Définition des 
+#Définition des données en entré pour les gaphiques des NDVI
 my_folder = ("D:/Cours_M2/Teledetecion_python/traitements/traitement/date_result")
-
 image_filename = os.path.join(my_folder, 'Serie_temp_S2_ndvi.tif')
 sample_code_lvl1 = os.path.join(my_folder,'sample_bdforet_codelvl1.tif')
 sample_code_lvl2 = os.path.join(my_folder,'sample_bdforet_codelvl2.tif')
 sample_code_lvl3 = os.path.join(my_folder,'sample_bdforet_codelvl3.tif')
 output_folder = ('D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/')
-bande_names = ['31/03/21','15/04/21','19/07/21','17/10/21','16/12/21','25/01/22']
+bande_names = ['15/04/21','31/03/21','19/07/21','17/10/21','16/12/21','25/01/22']
 code_lvl = ['1','2','3']
 
 #Création des 3 graphiques représentant la signature temporelle de la moyenne et l'écart type du ndvi par classe
