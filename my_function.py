@@ -462,7 +462,14 @@ def generate_temporal_signature_plot(my_folder, image_filename, sample_filename,
                                  line=dict(color='rgba(255,255,255,0)'),
                                  name=f'Std {label}',
                                  showlegend=True))
-
+        
+    # Update layout for a single-column legend
+    fig.update_layout(title=f'Signature temporelle de la moyenne et écart type du NDVI pour le niveau {code_lvl}',
+                      xaxis_title='Dates des images',
+                      yaxis_title='Valeurs NDVI', 
+                      legend=dict(orientation="v", x=1.05, y=1.0),
+                      showlegend=True)
+    
     # Save the plot with the sample name in the filename
     output_filename = os.path.join(my_folder, f'temp_mean_ndvi{code_lvl}.html')
     fig.write_html(output_filename)
