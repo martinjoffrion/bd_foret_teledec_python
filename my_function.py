@@ -446,27 +446,22 @@ def generate_temporal_signature_plot(my_folder, image_filename, sample_filename,
         # Calculate mean and standard deviation along the time axis
         mean_ndvi = np.mean(X, axis=0)
         std_ndvi = np.std(X, axis=0)
-
+        rgb = (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256))
+        rgb = ','.join(map(str, rgb))
         # Plotting mean NDVI with shaded standard deviation
         fig.add_trace(go.Scatter(x=band_names,
                                  y=mean_ndvi,
                                  mode='lines',
-                                 line=dict(color=f'rgb({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)})'),
+                                 line=dict(color=f'rgb({rgb})'),
                                  name=f'Class {label}'))
 
         fig.add_trace(go.Scatter(x=band_names + band_names[::-1],
                                  y=list(mean_ndvi - std_ndvi) + list((mean_ndvi + std_ndvi)[::-1]),
                                  fill='toself',
-                                 fillcolor=f'rgba({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)}, 0.3)',
+                                 fillcolor=f'rgba({rgb}, 0.3)',
                                  line=dict(color='rgba(255,255,255,0)'),
-                                 showlegend=False))
-
-    # Update layout for a single-column legend
-    fig.update_layout(title=f'Signature temporelle de la moyenne et écart type du NDVI pour le niveau {code_lvl}',
-                      xaxis_title='Dates des images',
-                      yaxis_title='Valeurs NDVI', 
-                      legend=dict(orientation="v", x=1.05, y=1.0),
-                      showlegend=True)
+                                 name=f'Std {label}',
+                                 showlegend=True))
 
     # Save the plot with the sample name in the filename
     output_filename = os.path.join(my_folder, f'temp_mean_ndvi{code_lvl}.html')
