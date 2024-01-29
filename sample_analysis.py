@@ -36,13 +36,13 @@ data_path = 'C:/Users/dsii/Downloads/bd_foret_teledec_python-main/data'
 os.chdir(working_directory)
 
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
-os.mkdir(os.path.join(working_directory,'intermediate_result_sample_analysis'))
+os.mkdir(os.path.join(working_directory, 'intermediate_result_sample_analysis'))
 # enregistre le chemin complet sous une variable
 iwdir = os.path.join(working_directory, 'intermediate_result_sample_analysis')
 
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats finaux
-my_folder = os.path.join(working_directory,'diag_result')
-os.mkdir(os.path.join(working_directory,'diag_result'))
+my_folder = os.path.join(working_directory, 'diag_result')
+os.mkdir(os.path.join(working_directory, 'diag_result'))
 
 
 ###############################################################################
@@ -82,11 +82,11 @@ f.generate_pixel_count_diagrams(shapefile_path, column_name, raster_path, save_p
 #Définition des 
 
 image_filename = os.path.join(data_path, 'Serie_temp_S2_ndvi.tif')
-sample_code_lvl1 = os.path.join(iwdir,'sample_bdforet_codelvl1.tif')
-sample_code_lvl2 = os.path.join(iwdir,'sample_bdforet_codelvl2.tif')
-sample_code_lvl3 = os.path.join(iwdir,'sample_bdforet_codelvl3.tif')
-bande_names = ['31/03/21','15/04/21','19/07/21','17/10/21','16/12/21','25/01/22']
-code_lvl = ['1','2','3']
+sample_code_lvl1 = os.path.join(iwdir, 'sample_bdforet_codelvl1.tif')
+sample_code_lvl2 = os.path.join(iwdir, 'sample_bdforet_codelvl2.tif')
+sample_code_lvl3 = os.path.join(iwdir, 'sample_bdforet_codelvl3.tif')
+bande_names = ['15/04/21', '31/03/21', '19/07/21', '17/10/21', '16/12/21', '25/01/22']
+code_lvl = ['1', '2', '3']
 
 f.generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1,
                                    code_lvl[0], bande_names)
