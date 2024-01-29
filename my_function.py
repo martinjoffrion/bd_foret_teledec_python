@@ -302,6 +302,19 @@ def warp( in_img,out_img,code_epsg):
 # Création des diagrammes baton du nombre de polygones par classe 
 
 def create_polygons_bar_charts(shapefile_path, column_names, save_path_template):
+    '''
+    
+    La fonction permet de compter le nombre de polygone pour chaque classe de la colonne spécifiée et de 
+    générer des diagrammes en baton des résultats
+    
+    Parameters
+    ----------
+    shapefile_path : shapefile (BD_foret)
+    column_names : Colonnes sur lesquelles la fonction va générer les diagrammes batons
+    save_path_template :  Emplacement et nom en sortie des diagrammes batons
+    
+    '''
+    
     # Charger le shapefile
     gdf = gpd.read_file(shapefile_path)
 
@@ -340,6 +353,20 @@ def create_polygons_bar_charts(shapefile_path, column_names, save_path_template)
 
 
 def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, save_path_template2):
+    '''
+    
+    La fonction permet de compter le nombre de pixel contenu dans les polygones de chaque classe de la colonne spécifiée 
+    en entrée et de générer des diagrammes en baton des résultats
+    
+    Parameters
+    ----------
+    shapefile_path : shapefile (BD_foret)
+    column_names : Colonnes sur lesquelles la fonction va générer les diagrammes batons
+    raster_path : Image en entrée sur laquelle est comptée le nombre de pixel pour chaque polygone de la BD_foret
+    save_path_template2 :  Emplacement et nom en sortie des diagrammes batons
+
+    '''
+    
     # Charger le GeoDataFrame à partir du shapefile
     gdf = gpd.read_file(shapefile_path)
 
@@ -389,6 +416,26 @@ def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, sav
 
 
 def generate_temporal_signature_plot(my_folder, image_filename, sample_filename, code_lvl, band_names):
+    '''
+    
+    Cette fonction permet de générer un graphique de la signature spectrale moyenne et de l'écart type pour chaque bande
+    d'un NDVI par classe.
+
+    Parameters
+    ----------
+    my_folder : Environnement ou vont être enregistré tous les graphiques générés par la fonction
+    
+    image_filename : Chemin d'accès pour le NDVI en entrée
+    
+    sample_filename : Chemin d'accès pour les différents sample rasterisés en entrée
+        
+    code_lvl : est une liste contenant 3 valeurs de 1 à 3 permettant d'afficher le bon niveau de nomenclature
+    dans le nom en sortie
+    
+    band_names : Une liste qui est utilisée dans la fonction afficher les dates en abscisse
+
+    '''
+    
     # Get samples from ROI
     dict_X, dict_Y, dict_t = get_samples_from_roi(image_filename, sample_filename, output_fmt="by_label")
 
