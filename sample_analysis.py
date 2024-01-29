@@ -52,7 +52,7 @@ f.create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
 ########### --- Création de diagrammes sur le nombre de pixels par classe
 
 # rasterisation du fichier Sample_BD_foret_T31TCJ.shp par classe dans le dossier intermédiaire
-image_filename = os.path.join(working_directory, 'Serie_temp_S2_ndvi.tif')
+image_filename = os.path.join(data_path, 'Serie_temp_S2_ndvi.tif')
 
 for niv in range(1, 4):
     sample_filename_niv = os.path.join(iwdir, 'sample_bdforet_codelvl{}.tif'.format(niv))
@@ -69,6 +69,25 @@ f.generate_pixel_count_diagrams(shapefile_path, column_name, raster_path, save_p
 
 ########### --- Création de graphiques représentant la signature temporelle de la moyenne
 ########### --- et l'écart type du ndvi par classe
+
+### Léon
+
+#Définition des 
+my_folder = ("D:/Cours_M2/Teledetecion_python/traitements/traitement/date_result")
+
+image_filename = os.path.join(my_folder, 'Serie_temp_S2_ndvi.tif')
+sample_code_lvl1 = os.path.join(my_folder,'sample_bdforet_codelvl1.tif')
+sample_code_lvl2 = os.path.join(my_folder,'sample_bdforet_codelvl2.tif')
+sample_code_lvl3 = os.path.join(my_folder,'sample_bdforet_codelvl3.tif')
+output_folder = ('D:/Cours_M2/Teledetecion_python/traitements/Diagrammes/')
+bande_names = ['31/03/21','15/04/21','19/07/21','17/10/21','16/12/21','25/01/22']
+code_lvl = ['1','2','3']
+
+#Création des 3 graphiques représentant la signature temporelle de la moyenne et l'écart type du ndvi par classe
+
+generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1, output_folder, code_lvl[0], bande_names)
+generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl2, output_folder,code_lvl[1], bande_names)
+generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl3, output_folder, code_lvl[2], bande_names)
 
 generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1, output_folder, code_lvl[0], bande_names)
 generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl2, output_folder,code_lvl[1], bande_names)
