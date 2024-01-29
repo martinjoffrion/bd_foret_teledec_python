@@ -288,17 +288,17 @@ for niv in range(len(nomencalture)) :
         f.display_metrics(list_metrics_lvl2,
                         'Cm_Code_lvl2', 
                         'Cl_Code_lvl2')
-
+        plt.pause(10)
 
     if field_name == nomencalture[2]:
         f.display_metrics(list_metrics_lvl1_fromlvl3,
                         'Cm_Code_lvl1_fromlvl3', 
                         'Cl_Code_lvl1_fromlvl3')
-        plt.pause(10)
+        plt.pause(20)
         f.display_metrics(list_metrics_lvl2_fromlvl3,
                         'Cm_Code_lvl2_fromlvl3', 
                         'Cl_Code_lvl2_fromlvl3')
-        plt.pause(10)
+        plt.pause(20)
         list_metrics_lvl3[0] = list_metrics_lvl3[0].astype(int)
         f.display_metrics(list_metrics_lvl3,
                         'Cm_Code_lvl3', 
