@@ -654,7 +654,7 @@ def create_polygons_bar_charts(shapefile_path, column_names, save_path_template)
         # Créer le graphique
         plt.figure(figsize=(10, 6))
         ax = count_by_column.plot(kind='bar', color='mediumseagreen')
-        plt.title('Répartition des éssences de la BD Forêt', weight='bold', fontsize=18)
+        plt.title('Répartition des essences de la BD Forêt', weight='bold', fontsize=18)
         plt.xlabel(f'Nomenclature utilisée : {column_name}', weight='bold')
         plt.ylabel('Nombre de polygones', weight='bold')
         plt.xticks(rotation=25, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
