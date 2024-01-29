@@ -89,9 +89,4 @@ generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1, ou
 generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl2, output_folder,code_lvl[1], bande_names)
 generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl3, output_folder, code_lvl[2], bande_names)
 
-generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1, output_folder, code_lvl[0], bande_names)
-generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl2, output_folder,code_lvl[1], bande_names)
-generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl3, output_folder, code_lvl[2], bande_names)
-
-
 
