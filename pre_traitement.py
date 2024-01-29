@@ -2,7 +2,7 @@
 """
 Created on Sun Nov 26 15:29:41 2023
 
-@author: joffrion, ducrocq et arondel
+@author: arondel, ducrocq et joffrion
 """
 ###############################################################################
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
@@ -46,14 +46,14 @@ roi = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/emprise_etude.s
 os.chdir(working_directory)
 
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
-os.mkdir(os.path.join(working_directory,'intermediate_result'))
+os.mkdir(os.path.join(working_directory, 'intermediate_result'))
 # enregistre le chemin complet sous une variable
 iwdir = os.path.join(working_directory, 'intermediate_result')
 
 # --- Création d'un sous-dossier pour y stocker les images concaténées par date
-os.mkdir(os.path.join(working_directory,'date_result'))
+os.mkdir(os.path.join(working_directory, 'date_result'))
 # enregistre le chemin complet sous une variable
-ifwdir = os.path.join(working_directory,'date_result')
+ifwdir = os.path.join(working_directory, 'date_result')
 
 ########### --- Découpage et Rasterisation de la BD_FORET
 
@@ -116,9 +116,9 @@ for subfil in range(len(files)):
         input_img = list_band_name[i]
         band_name = os.path.basename(input_img)
         name = 'cut{band_name}'
-        output_raster = os.path.join(iwdir, name.format(band_name=band_name))
+        output_raster = os.path.join(iwdir, name.format(band_name = band_name))
         # appel de la fonction cmd_ExtractROI
-        f.cmd_ExtractROI(input_img,new_emprise,output_raster)
+        f.cmd_ExtractROI(input_img, new_emprise, output_raster)
         list_bande_cut.append(output_raster)
         
     # convertir les "lists" en "dictionary"
@@ -140,7 +140,7 @@ for subfil in range(len(files)):
         inm = list_bande_20m_plus[i]
         band_name = os.path.basename(inm)
         name = '_10m_{band_name}'
-        output_raster = os.path.join(iwdir, name.format(band_name=band_name))
+        output_raster = os.path.join(iwdir, name.format(band_name = band_name))
         # appel de la fonction cmd_Superimpose
         f.cmd_Superimpose(inr, inm, output_raster)
         list_bande_finale.append(output_raster)
@@ -152,7 +152,7 @@ for subfil in range(len(files)):
     # appel de la fonction get_date_f_b_path
     date =  f.get_date_f_b_path(list_bande_finale[0]) # recupération la date de la première bande
     name = 'output_{date}_date.tif'
-    output_concat = os.path.join(iwdir, name.format(date=date))
+    output_concat = os.path.join(iwdir, name.format(date = date))
     # appel de la fonction cmd_ConcatenateImages
     f.cmd_ConcatenateImages(list_bande_finale, output_concat)
     list_date_path.append(output_concat)
