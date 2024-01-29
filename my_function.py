@@ -2,7 +2,7 @@
 """
 Created on Mon Nov 27 09:41:17 2023
 
-@author: ducrocq, joffrion et arondel
+@author: arondel, ducrocq et joffrion
 """
 
 import os
