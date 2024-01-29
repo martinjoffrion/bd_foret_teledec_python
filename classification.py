@@ -163,10 +163,11 @@ for niv in range(len(nomenclature)) :
           print('k fold')
           
           # 1 --- Train
-          clf = RF(max_depth = 20, 
+          clf = RF(max_depth = 10, # max_depth = 10
                     oob_score = True,
                     max_samples = .75,
                     class_weight = 'balanced',
+                    n_estimators = 10, # n_estimators = par défaut
                     n_jobs = -1)
           
           clf.fit(X_train, Y_train)
