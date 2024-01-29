@@ -2,7 +2,7 @@
 """
 Created on Sat Jan 20 13:10:56 2024
 
-@author: clair & & 
+@author: arondel, ducrocq et joffrion
 """
 ###############################################################################
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
@@ -59,15 +59,15 @@ sample_bdforet_shp['fid'] = sample_bdforet_shp.reset_index().index + 1
 # Necessité de l'enregistrer pour la fonction OTB (suite) : à enregistrer dans un dossier intermédiaire
 sample_bdforet_filename = os.path.join(iwdir, 'Sample_BD_foret_T31TCJ_fid.shp')
 sample_bdforet_shp.to_file(sample_bdforet_filename,
-                           driver="ESRI Shapefile")
+                           driver = "ESRI Shapefile")
     
-nomenclature = ['Code_lvl1','Code_lvl2','Code_lvl3']
+nomenclature = ['Code_lvl1', 'Code_lvl2', 'Code_lvl3']
 for i in nomenclature :
     print(f'for {i} nbr of NA is {sample_bdforet_shp[i].isna().sum()}')
 
 # champs nécessaires pour la fonction cmd_Rasterization
 field_name = 'fid' # champ nécessaire à la rasterisation
-out_sample_filename = os.path.join(iwdir,'sample_bdforet_id.tif')
+out_sample_filename = os.path.join(iwdir, 'sample_bdforet_id.tif')
 
 # appel à la fonction
 f.cmd_Rasterization(sample_bdforet_filename, out_sample_filename,
@@ -80,9 +80,9 @@ sample_bdforet_id = out_sample_filename
 _, groups, t_groups = f.get_samples_from_roi(image_filename, out_sample_filename)
 
 # dataframe avec tous les groupes
-grps_df = pd.DataFrame({'id_groupe_polyg':groups.reshape(-1),
-                        'Coord_lignes':t_groups[0],
-                        'Coord_col':t_groups[1]})
+grps_df = pd.DataFrame({'id_groupe_polyg': groups.reshape(-1),
+                        'Coord_lignes': t_groups[0],
+                        'Coord_col': t_groups[1]})
 
 et = time.time()
 elapsed_time = et - st
@@ -92,7 +92,7 @@ print('Execution time rasterization id :', elapsed_time, 'seconds')
 ###############################################################################
 
 # Création d'une boucle sur les 3 niveaux de nomenclature
-nomenclature = ['Code_lvl1','Code_lvl2','Code_lvl3']
+nomenclature = ['Code_lvl1', 'Code_lvl2', 'Code_lvl3']
 
 list_metrics_lvl1 = []
 list_metrics_lvl2 = []
@@ -121,10 +121,10 @@ for niv in range(len(nomenclature)) :
     Y = Y.reshape(-1)
     
     # création d'un dataframe avec les coordonnées de l'image
-    t_df = pd.DataFrame({'Coord_lignes':t[0],'Coord_col':t[1]})
+    t_df = pd.DataFrame({'Coord_lignes': t[0],'Coord_col': t[1]})
 
     # jointure entre les coordonnées (t) de l'image et celles du df 'all_groups' pour ne garder que celles correspondantes
-    grps_niv = t_df.merge(grps_df, how="left", on=["Coord_lignes", "Coord_col"])
+    grps_niv = t_df.merge(grps_df, how = "left", on = ["Coord_lignes", "Coord_col"])
     
     # transformation en array pour la suite (StratifiedGroupKFold)
     grps_niv = grps_niv["id_groupe_polyg"].to_numpy()
@@ -155,8 +155,8 @@ for niv in range(len(nomenclature)) :
       elapsed_time = et - st
       print('Execution time:', elapsed_time, 'seconds')# à enlever pour la suite
       print(f'begining {iter} iterations {field_name} k fold')
-      kf = StratifiedGroupKFold(n_splits=nb_folds, shuffle=True)
-      for train, test in kf.split(X, Y, groups=grps_niv):
+      kf = StratifiedGroupKFold(n_splits = nb_folds, shuffle = True)
+      for train, test in kf.split(X, Y, groups = grps_niv):
           X_train, X_test = X[train], X[test]
           Y_train, Y_test = Y[train], Y[test]
           
@@ -183,8 +183,8 @@ for niv in range(len(nomenclature)) :
               list_cm_lvl2.append(confusion_matrix(Y_test_lvl2, Y_predict_lvl2))
               list_accuracy_lvl2.append(accuracy_score(Y_test_lvl2, Y_predict_lvl2))
               report_lvl2 = classification_report(Y_test_lvl2, Y_predict_lvl2,
-                                             labels=np.unique(Y_predict_lvl2),
-                                             output_dict=True)
+                                             labels = np.unique(Y_predict_lvl2),
+                                             output_dict = True)
               list_report_lvl2.append(f.report_from_dict_to_df(report_lvl2))
               
               # level 1
@@ -194,8 +194,8 @@ for niv in range(len(nomenclature)) :
               list_cm_lvl1.append(confusion_matrix(Y_test_lvl1, Y_predict_lvl1))
               list_accuracy_lvl1.append(accuracy_score(Y_test_lvl1, Y_predict_lvl1))
               report_lvl1 = classification_report(Y_test_lvl1, Y_predict_lvl1,
-                                             labels=np.unique(Y_predict_lvl1),
-                                             output_dict=True)
+                                             labels = np.unique(Y_predict_lvl1),
+                                             output_dict = True)
               list_report_lvl1.append(f.report_from_dict_to_df(report_lvl1))
 
           if field_name == nomenclature[1] :
@@ -206,8 +206,8 @@ for niv in range(len(nomenclature)) :
               list_cm_lvl1.append(confusion_matrix(Y_test_lvl1, Y_predict_lvl1))
               list_accuracy_lvl1.append(accuracy_score(Y_test_lvl1, Y_predict_lvl1))
               report_lvl1 = classification_report(Y_test_lvl1, Y_predict_lvl1,
-                                             labels=np.unique(Y_predict_lvl1),
-                                             output_dict=True)
+                                             labels = np.unique(Y_predict_lvl1),
+                                             output_dict = True)
               list_report_lvl1.append(f.report_from_dict_to_df(report_lvl1))
               
 
@@ -215,8 +215,8 @@ for niv in range(len(nomenclature)) :
           list_cm.append(confusion_matrix(Y_test, Y_predict))
           list_accuracy.append(accuracy_score(Y_test, Y_predict))
           report = classification_report(Y_test, Y_predict,
-                                         labels=np.unique(Y_predict),
-                                         output_dict=True)
+                                         labels = np.unique(Y_predict),
+                                         output_dict = True)
           # store them        
           list_report.append(f.report_from_dict_to_df(report))
 
@@ -292,23 +292,23 @@ for niv in range(len(nomenclature)) :
     image = f.open_image(image_filename)
     nb_row, nb_col, _ = f.get_image_dimension(image)
     # initialisation de l'array
-    img = np.zeros((nb_row, nb_col, 1), dtype='uint8')
+    img = np.zeros((nb_row, nb_col, 1), dtype = 'uint8')
     
     # np.Y_predict
     img[t_img[0], t_img[1], 0] = Y_predict_img
     # appel à la fonction
-    f.write_image(image_output, img, data_set=image)
+    f.write_image(image_output, img, data_set = image)
     
     if field_name == nomenclature[2]:
         # niveau 2
         image_outputlvl2 = f'carte_essences_lvl2_from{level_name}.tif'
         img = np.floor(img/10) # les divisions permettent de passer à un autre niveau
-        f.write_image(image_outputlvl2, img, data_set=image)
+        f.write_image(image_outputlvl2, img, data_set = image)
         
         # niveau 1
         image_outputlvl1 = f'carte_essences_lvl1_from{level_name}.tif'
         img = np.floor(img/10)
-        f.write_image(image_outputlvl1, img, data_set=image)
+        f.write_image(image_outputlvl1, img, data_set = image)
         
         et = time.time()
         elapsed_time = et - st
@@ -318,22 +318,22 @@ for niv in range(len(nomenclature)) :
         # niveau 1
         image_outputlvl1 = f'carte_essences_lvl1_from{level_name}.tif'
         img = np.floor(img/10)
-        f.write_image(image_outputlvl1, img, data_set=image)
+        f.write_image(image_outputlvl1, img, data_set = image)
 
 ####
 
 
-list_label = ['mean_cm' , 'mean_accuracy' , 'std_accuracy' ,
-              'mean_df_report' , 'std_df_report']
+list_label = ['mean_cm' , 'mean_accuracy', 'std_accuracy' ,
+              'mean_df_report', 'std_df_report']
 
 Metrics_summerize = pd.DataFrame({
-                                'metrics':list_label,
-                                'lvl1':list_metrics_lvl1,
-                                'lvl2':list_metrics_lvl2,
-                                'lvl3':list_metrics_lvl3,
+                                'metrics': list_label,
+                                'lvl1': list_metrics_lvl1,
+                                'lvl2': list_metrics_lvl2,
+                                'lvl3': list_metrics_lvl3,
                                 #'lvl1_fromlvl3':list_metrics_lvl1_fromlvl3,
-                                'lvl2_fromlvl3':list_metrics_lvl2_fromlvl3,
-                                'lvl1_fromlvl2':list_metrics_lvl1_fromlvl2,
+                                'lvl2_fromlvl3': list_metrics_lvl2_fromlvl3,
+                                'lvl1_fromlvl2': list_metrics_lvl1_fromlvl2,
                                 })
 Metrics_summerize.to_csv('Metrics_summerize.csv')
 
