@@ -59,7 +59,7 @@ sample_bdforet_shp['fid'] = sample_bdforet_shp.reset_index().index + 1
 # Necessité de l'enregistrer pour la fonction OTB (suite) : à enregistrer dans un dossier intermédiaire
 sample_bdforet_filename = os.path.join(iwdir, 'Sample_BD_foret_T31TCJ_fid.shp')
 sample_bdforet_shp.to_file(sample_bdforet_filename,
-                           driver = "ESRI Shapefile")
+                           driver="ESRI Shapefile")
     
 nomenclature = ['Code_lvl1', 'Code_lvl2', 'Code_lvl3']
 for i in nomenclature :
@@ -155,20 +155,20 @@ for niv in range(len(nomenclature)) :
       elapsed_time = et - st
       print('Execution time:', elapsed_time, 'seconds')# à enlever pour la suite
       print(f'begining {iter} iterations {field_name} k fold')
-      kf = StratifiedGroupKFold(n_splits = nb_folds, shuffle = True)
-      for train, test in kf.split(X, Y, groups = grps_niv):
+      kf = StratifiedGroupKFold(n_splits=nb_folds, shuffle=True)
+      for train, test in kf.split(X, Y, groups=grps_niv):
           X_train, X_test = X[train], X[test]
           Y_train, Y_test = Y[train], Y[test]
           
           print('k fold')
           
           # 1 --- Train
-          clf = RF(max_depth = 10, # max_depth = 10
-                    oob_score = True,
-                    max_samples = .75,
-                    class_weight = 'balanced',
-                    n_estimators = 10, # n_estimators = par défaut
-                    n_jobs = -1)
+          clf = RF(max_depth=10, # max_depth = 10
+                    oob_score=True,
+                    max_samples=.75,
+                    class_weight='balanced',
+                    n_estimators=10, # n_estimators = par défaut
+                    n_jobs=-1)
           
           clf.fit(X_train, Y_train)
 
@@ -177,14 +177,14 @@ for niv in range(len(nomenclature)) :
           
           if field_name == nomenclature[2] :
               # level 2
-              Y_predict_lvl2 = np.floor(Y_predict/10)
-              Y_test_lvl2 = np.floor(Y_test/10)
+              Y_predict_lvl2 = np.floor(Y_predict / 10)
+              Y_test_lvl2 = np.floor(Y_test / 10)
               # compute quality
               list_cm_lvl2.append(confusion_matrix(Y_test_lvl2, Y_predict_lvl2))
               list_accuracy_lvl2.append(accuracy_score(Y_test_lvl2, Y_predict_lvl2))
               report_lvl2 = classification_report(Y_test_lvl2, Y_predict_lvl2,
-                                             labels = np.unique(Y_predict_lvl2),
-                                             output_dict = True)
+                                             labels=np.unique(Y_predict_lvl2),
+                                             output_dict=True)
               list_report_lvl2.append(f.report_from_dict_to_df(report_lvl2))
               
               # level 1
@@ -292,23 +292,23 @@ for niv in range(len(nomenclature)) :
     image = f.open_image(image_filename)
     nb_row, nb_col, _ = f.get_image_dimension(image)
     # initialisation de l'array
-    img = np.zeros((nb_row, nb_col, 1), dtype = 'uint8')
+    img = np.zeros((nb_row, nb_col, 1), dtype='uint8')
     
     # np.Y_predict
     img[t_img[0], t_img[1], 0] = Y_predict_img
     # appel à la fonction
-    f.write_image(image_output, img, data_set = image)
+    f.write_image(image_output, img, data_set=image)
     
     if field_name == nomenclature[2]:
         # niveau 2
         image_outputlvl2 = f'carte_essences_lvl2_from{level_name}.tif'
         img = np.floor(img/10) # les divisions permettent de passer à un autre niveau
-        f.write_image(image_outputlvl2, img, data_set = image)
+        f.write_image(image_outputlvl2, img, data_set=image)
         
         # niveau 1
         image_outputlvl1 = f'carte_essences_lvl1_from{level_name}.tif'
         img = np.floor(img/10)
-        f.write_image(image_outputlvl1, img, data_set = image)
+        f.write_image(image_outputlvl1, img, data_set=image)
         
         et = time.time()
         elapsed_time = et - st
@@ -318,7 +318,7 @@ for niv in range(len(nomenclature)) :
         # niveau 1
         image_outputlvl1 = f'carte_essences_lvl1_from{level_name}.tif'
         img = np.floor(img/10)
-        f.write_image(image_outputlvl1, img, data_set = image)
+        f.write_image(image_outputlvl1, img, data_set=image)
 
 ####
 
