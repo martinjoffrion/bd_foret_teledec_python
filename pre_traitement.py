@@ -68,7 +68,7 @@ f.rasterize_shapefile(foret_filtre_path, out_image, roi, field, 10)
 ########### --- Vérification du système de projection
 
 # boucle sur le nombre de sous-dossiers dans le dossier data_set (data_path)
-files = [os.path.join(data_path,f) for f in os.listdir(data_path)
+files = [os.path.join(data_path, f) for f in os.listdir(data_path)
          if os.path.isdir(os.path.join(data_path, f))]
 result_1 = os.path.join(files[0], "*FRE_B2.tif")
 img_path = glob.glob(result_1)[0]
