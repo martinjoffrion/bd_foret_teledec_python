@@ -46,14 +46,14 @@ roi = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/emprise_etude.s
 os.chdir(working_directory)
 
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
-os.mkdir(os.path.join(working_directory, 'intermediate_result'))
+os.mkdir(os.path.join(working_directory, 'intermediate_result_pre_traitement'))
 # enregistre le chemin complet sous une variable
-iwdir = os.path.join(working_directory, 'intermediate_result')
+iwdir = os.path.join(working_directory, 'intermediate_result_pre_traitement')
 
 # --- Création d'un sous-dossier pour y stocker les images concaténées par date
-os.mkdir(os.path.join(working_directory, 'date_result'))
+os.mkdir(os.path.join(working_directory, 'date_result_pre_traitement'))
 # enregistre le chemin complet sous une variable
-ifwdir = os.path.join(working_directory, 'date_result')
+ifwdir = os.path.join(working_directory, 'date_result_pre_traitement')
 
 ########### --- Découpage et Rasterisation de la BD_FORET
 
