@@ -8,15 +8,12 @@ Created on Sun Nov 26 15:29:41 2023
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
 ###############################################################################
 
-# --- Chemin d'accès du dossier rendu dézippé :
-working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4'
-
 #!pip install --update rasterio
 import glob
 import geopandas as gpd
 import rasterio
 import os
-os.chdir(working_directory)
+
 
 # --- Mettre le chemin d'accès du dossier OTB-8.1.2/bin :
 os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
@@ -180,5 +177,5 @@ f.apply_mask(os.path.join(ifwdir, output_concat), output_concat, gdf_mask)
 ########### --- Suppression des résultats intermédiaires
 
 shutil.rmtree(iwdir)
-shutil.rmtree(ifwdir)
+
 
