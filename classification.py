@@ -132,7 +132,7 @@ for niv in range(len(nomenclature)) :
     grps_niv = grps_niv["id_groupe_polyg"].to_numpy()
     
     # paramètres pour la StratifiedGroupKFold
-    nb_iter = 3 # pour la vf, mettre 30 itérations
+    nb_iter = 30
     nb_folds = 5
     
     list_cm = []
@@ -165,11 +165,11 @@ for niv in range(len(nomenclature)) :
           print('k fold')
           
           # 1 --- Train
-          clf = RF(max_depth=10, # max_depth = 10
+          clf = RF(max_depth=10,
                     oob_score=True,
                     max_samples=.75,
                     class_weight='balanced',
-                    n_estimators=10, # n_estimators = par défaut
+                    n_estimators=20,
                     n_jobs=-1)
           
           clf.fit(X_train, Y_train)
