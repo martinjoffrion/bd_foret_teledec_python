@@ -9,7 +9,7 @@
  - [x] des images acquises entre janvier 2021 et février 2022 ;
  - [x] des images de la tuile T31TCJ 
  - [x] des images qui ont une couverture de nuages inférieure à 15%
- - [ ] des images en réflectance (niveau 2A)
+ - [x] des images en réflectance (niveau 2A)
  - [x] une date en hiver ;
 > [!NOTE]  
 > 25 janvier 2022
@@ -21,7 +21,7 @@
 > 19 juillet 2021
 
 ## pre_traitement.py
-Fonctionne en 1h38
+
 ### Conventions/noms fichier à vérifier
 - [x] Nom du fichier : pre_traitement.py
 - [x] Fonctions mises dans script my_function.py à part
@@ -87,7 +87,7 @@ Fonctionne en 1h38
 
 ## Sample_BD_foret_T31TCJ.shp
 
- - [ ] les échantillons doivent être inclus dans l'emprise des images S2 que vous allez utiliser (après découpe Cf section Pré-traitement des images);
+ - [x] les échantillons doivent être inclus dans l'emprise des images S2 que vous allez utiliser (après découpe Cf section Pré-traitement des images);
  - [x] utilisez uniquement les classes présentes dans la nomenclature du prof
 > utilisation de la nomenclature envoyé par Louis-Marie
  - [x] certaines classes TFV ne sont pas à prendre en compte pour tous les niveaux. Par exemple, les polygones de la classe Forêt fermée de feuillus purs en îlots ne sont pas à prendre en compte pour le niveau 3 (symbole Ø) mais bien à prendre en compte pour les niveaux 2 et 1 ;
@@ -98,19 +98,19 @@ Fonctionne en 1h38
 > [!WARNING]
 > En découpant avec le masque foret, on tombe sur 10749 --> script diagramme opérationnel
 - Comprend les champs : 
-  - [ ] Nom_lvl3 ;
-  - [ ] Code_lvl3 ;
-  - [ ] Nom_lvl2 ;
-  - [ ] Code_lvl2 ;
-  - [ ] Nom_lvl1 ;
-  - [ ] Code_lvl1.
+  - [x] Nom_lvl3 ;
+  - [x] Code_lvl3 ;
+  - [x] Nom_lvl2 ;
+  - [x] Code_lvl2 ;
+  - [x] Nom_lvl1 ;
+  - [x] Code_lvl1.
 - Laissez également les attributs déjà présents.
-  - [ ] ID
-  - [ ] CODE_TFV
-  - [ ] TFV
-  - [ ] TFV_G11
-  - [ ] ESSENCE
-- [ ]Nommez le fichier Sample_BD_foret_T31TCJ.shp (si vous utilisez le format shapefile).
+  - [x] ID
+  - [x] CODE_TFV
+  - [x] TFV
+  - [x] TFV_G11
+  - [x] ESSENCE
+  - [x] Nommez le fichier Sample_BD_foret_T31TCJ.shp (si vous utilisez le format shapefile).
 > prof : je regarderai juste le fichier final en contrôlant que tous les attributs soient présents (et corrects) et qu'il y ait le bon nombres de polygones.
 
 ## sample_analysis.py
