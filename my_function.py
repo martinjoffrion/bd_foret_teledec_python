@@ -47,7 +47,7 @@ def traitement_forest (bd_foret_path, out_dir):
     foret_filtre = foret[~foret['TFV'].isin(valeurs_a_supprimer)]
     foret_filtre = foret_filtre[~foret_filtre['TFV'].str.startswith('Forêt ouverte')]
     foret_filtre['raster'] = 1 
-    foret_filtre.to_file(f'{out_dir}/bd_foret', driver="ESRI Shapefile")
+    foret_filtre.to_file(f'{out_dir}/bd_foret', driver = "ESRI Shapefile")
     foret_filtre_path = 'bd_foret/bd_foret.shp'
     
     return foret_filtre, foret_filtre_path
@@ -76,9 +76,9 @@ def rasterize_shapefile(in_vector, out_image, emprise_etude, field_name, spatial
                "-tr {spatial_resolution} {spatial_resolution} "
                "-te {xmin} {ymin} {xmax} {ymax} -ot Byte -of GTiff "
                "{in_vector} {out_image}")
-    cmd = cmd_pattern.format(in_vector = in_vector, xmin = xmin, ymin = ymin, xmax = xmax,
-                         ymax = ymax, out_image = out_image, field_name = field_name,
-                         spatial_resolution = spatial_resolution)
+    cmd = cmd_pattern.format(in_vector=in_vector, xmin=xmin, ymin=ymin, xmax=xmax,
+                         ymax=ymax, out_image=out_image, field_name=field_name,
+                         spatial_resolution=spatial_resolution)
     os.system(cmd)
 
 
@@ -124,7 +124,7 @@ def cmd_Superimpose(inr, inm, output_raster):
     os.system(cmd)
 
 
-def cmd_ConcatenateImages(list_image, output_concat, type = None):
+def cmd_ConcatenateImages(list_image, output_concat, type=None):
     '''
 
     Parameters
@@ -163,8 +163,8 @@ def get_date_f_b_path(str_band_path):
 
     '''
     b_ = os.path.basename(str_band_path)
-    b_ = b_.replace('-','_').split('_')
-    b = [x for x in b_ if len(x) == 8 and int(x)>20000000]
+    b_ = b_.replace('-', '_').split('_')
+    b = [x for x in b_ if len(x) == 8 and int(x) > 20000000]
     b_date = b[0]
     return b_date
 
@@ -297,7 +297,7 @@ def reprojection (input_raster, epsg_cible, output_raster, dtype=None):
     
     
 def warp( in_img, out_img, code_epsg):
-    gdal.Warp (out_img, in_img, dstSRS = f'EPSG: {code_epsg}') 
+    gdal.Warp (out_img, in_img, dstSRS=f'EPSG: {code_epsg}') 
 
 # Création des diagrammes baton du nombre de polygones par classe 
 
@@ -326,26 +326,26 @@ def create_polygons_bar_charts(shapefile_path, column_names, save_path_template)
         count_by_column = gdf[column_name].value_counts()
 
         # Créer le graphique
-        plt.figure(figsize = (10, 6))
-        ax = count_by_column.plot(kind = 'bar', color = 'mediumseagreen')
-        plt.title('Répartition des essences de la BD Forêt', weight = 'bold', fontsize = 18)
-        plt.xlabel(f'Nomenclature utilisée : {column_name}', weight = 'bold')
-        plt.ylabel('Nombre de polygones', weight = 'bold')
-        plt.xticks(rotation = 25, ha = 'right')  # Rotation des étiquettes pour une meilleure lisibilité
+        plt.figure(figsize=(10, 6))
+        ax = count_by_column.plot(kind='bar', color='mediumseagreen')
+        plt.title('Répartition des essences de la BD Forêt', weight='bold', fontsize=18)
+        plt.xlabel(f'Nomenclature utilisée : {column_name}', weight='bold')
+        plt.ylabel('Nombre de polygones', weight='bold')
+        plt.xticks(rotation=25, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
         plt.tight_layout()
 
         # Ajouter une légende
         plt.legend(['Nombre de Polygones'], loc='upper right')
 
         # Ajouter une grille à l'arrière
-        plt.grid(axis = 'y', linestyle = '--', alpha = 0.7)
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
 
         # Annoter chaque barre avec sa valeur
         for i, v in enumerate(count_by_column):
-            ax.text(i, v + 0.1, str(v), ha = 'center', va = 'bottom', fontsize = 8)
+            ax.text(i, v + 0.1, str(v), ha='center', va='bottom', fontsize=8)
 
         # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
-        save_path = save_path_template.format(column_number = column_number)
+        save_path = save_path_template.format(column_number=column_number)
         plt.savefig(save_path)
 
         # Afficher le graphique si nécessaire
@@ -374,7 +374,7 @@ def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, sav
         # Extrait le numéro de la colonne (assumant que le format est "Code_lvlXX")
         column_number = ''.join(filter(str.isdigit, class_column))
         # Calculer les statistiques zonales pour chaque polygone
-        stats = zonal_stats(gdf.geometry, raster_path, stats='count', all_touched = True)
+        stats = zonal_stats(gdf.geometry, raster_path, stats='count', all_touched=True)
 
         # Extraire le nombre de pixels de chaque statistique et l'ajouter à une nouvelle colonne
         pixel_counts = [stat['count'] for stat in stats]
@@ -384,15 +384,15 @@ def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, sav
         pixel_sum_per_class = gdf.groupby(class_column)['nb_pixels'].sum()
 
         # Créer le graphique à barres
-        plt.figure(figsize = (10, 6))
-        ax = pixel_sum_per_class.plot(kind = 'bar', color = 'forestgreen')  # Ajout de la bordure noire
-        plt.title('Nombre de pixels contenus dans les polygones par classe', weight = 'bold', fontsize = 18)
-        plt.xlabel(f'Nomenclature utilisée : {class_column}', weight = 'bold')
-        plt.xticks(rotation = 25, ha = 'right')  # Rotation des étiquettes pour une meilleure lisibilité
-        plt.ylabel('Somme du nombre de pixels', weight = 'bold')
+        plt.figure(figsize=(10, 6))
+        ax = pixel_sum_per_class.plot(kind='bar', color='forestgreen')  # Ajout de la bordure noire
+        plt.title('Nombre de pixels contenus dans les polygones par classe', weight='bold', fontsize=18)
+        plt.xlabel(f'Nomenclature utilisée : {class_column}', weight='bold')
+        plt.xticks(rotation=25, ha='right')  # Rotation des étiquettes pour une meilleure lisibilité
+        plt.ylabel('Somme du nombre de pixels', weight='bold')
 
         # Ajouter une grille à l'arrière
-        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.grid(axis = 'y', linestyle='--', alpha = 0.7)
 
         # Ajouter les valeurs de chaque colonne au-dessus des colonnes avec une marge réduite
         for p in ax.patches:
@@ -404,7 +404,7 @@ def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, sav
                             ha='center', va='bottom')
 
         # Ajuster les marges pour agrandir le cadre
-        plt.subplots_adjust(bottom = 0.3)
+        plt.subplots_adjust(bottom=0.3)
 
         # Sauvegarder le graphique avec un nom de fichier basé sur le format spécifié
         save_path = save_path_template2.format(column_number=column_number)
@@ -437,7 +437,7 @@ def generate_temporal_signature_plot(my_folder, image_filename, sample_filename,
     '''
     
     # Get samples from ROI
-    dict_X, dict_Y, dict_t = get_samples_from_roi(image_filename, sample_filename, output_fmt = "by_label")
+    dict_X, dict_Y, dict_t = get_samples_from_roi(image_filename, sample_filename, output_fmt="by_label")
 
     # Plotting
     fig = go.Figure()
@@ -449,11 +449,11 @@ def generate_temporal_signature_plot(my_folder, image_filename, sample_filename,
         rgb = (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256))
         rgb = ','.join(map(str, rgb))
         # Plotting mean NDVI with shaded standard deviation
-        fig.add_trace(go.Scatter(x = band_names,
-                                 y = mean_ndvi,
-                                 mode = 'lines',
-                                 line = dict(color = f'rgb({rgb})'),
-                                 name = f'Class {label}'))
+        fig.add_trace(go.Scatter(x=band_names,
+                                 y=mean_ndvi,
+                                 mode='lines',
+                                 line=dict(color=f'rgb({rgb})'),
+                                 name=f'Class {label}'))
 
         fig.add_trace(go.Scatter(x = band_names + band_names[::-1],
                                  y = list(mean_ndvi - std_ndvi) + list((mean_ndvi + std_ndvi)[::-1]),
@@ -464,11 +464,11 @@ def generate_temporal_signature_plot(my_folder, image_filename, sample_filename,
                                  showlegend = True))
         
     # Update layout for a single-column legend
-    fig.update_layout(title = f'Signature temporelle de la moyenne et écart type du NDVI pour le niveau {code_lvl}',
-                      xaxis_title = 'Dates des images',
-                      yaxis_title = 'Valeurs NDVI', 
-                      legend = dict(orientation = "v", x = 1.05, y = 1.0),
-                      showlegend = True)
+    fig.update_layout(title=f'Signature temporelle de la moyenne et écart type du NDVI pour le niveau {code_lvl}',
+                      xaxis_title='Dates des images',
+                      yaxis_title='Valeurs NDVI', 
+                      legend=dict(orientation="v", x=1.05, y=1.0),
+                      showlegend=True)
     
     # Save the plot with the sample name in the filename
     output_filename = os.path.join(my_folder, f'temp_mean_ndvi{code_lvl}.html')
@@ -543,10 +543,10 @@ def agg_metrics (list_cm ,list_accuracy, list_report) :
     mean_report = array_report.mean(axis=0)
     std_report = array_report.std(axis=0)
     a_report = list_report[0]
-    mean_df_report = pd.DataFrame(mean_report, index = a_report.index,
-                                  columns = a_report.columns)
+    mean_df_report = pd.DataFrame(mean_report, index=a_report.index,
+                                  columns=a_report.columns)
     std_df_report = pd.DataFrame(std_report, index=a_report.index,
-                                 columns = a_report.columns)
+                                 columns=a_report.columns)
     
     return mean_cm, mean_accuracy, std_accuracy, mean_df_report, std_df_report
 
@@ -573,8 +573,8 @@ def plot_class_metrics (mean_oa, std_oa, mean_report, std_report, out_qualite):
 
     '''
     # Display class metrics
-    fig, ax = plt.subplots(figsize = (10, 7))
-    ax = mean_report.T.plot.bar(ax = ax, yerr = std_report.T, zorder = 2)
+    fig, ax = plt.subplots(figsize=(10, 7))
+    ax = mean_report.T.plot.bar(ax=ax, yerr=std_report.T, zorder=2)
     ax.set_ylim(0.5, 1)
     _ = ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(mean_oa,
                                                           std_oa),
@@ -586,23 +586,23 @@ def plot_class_metrics (mean_oa, std_oa, mean_report, std_report, out_qualite):
     ax.set_facecolor('ivory')
     # labels
     x_label = ax.get_xlabel()
-    ax.set_xlabel(x_label, fontdict = {'fontname': 'Sawasdee'}, fontsize = 14)
+    ax.set_xlabel(x_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
     y_label = ax.get_ylabel()
-    ax.set_ylabel(y_label, fontdict = {'fontname': 'Sawasdee'}, fontsize = 14)
+    ax.set_ylabel(y_label, fontdict={'fontname': 'Sawasdee'}, fontsize=14)
     # borders
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
     ax.spines["left"].set_visible(False)
-    ax.tick_params(axis = 'x', colors = 'darkslategrey', labelsize = 14)
-    ax.tick_params(axis = 'y', colors = 'darkslategrey', labelsize = 14)
+    ax.tick_params(axis='x', colors='darkslategrey', labelsize=14)
+    ax.tick_params(axis='y', colors='darkslategrey', labelsize=14)
     # grid
     ax.minorticks_on()
-    ax.yaxis.grid(which = 'major', color = 'darkgoldenrod', linestyle = '--',
-                  linewidth = 0.5, zorder = 1)
-    ax.yaxis.grid(which = 'minor', color = 'darkgoldenrod', linestyle = '-.',
-                  linewidth = 0.3, zorder = 1)
-    plt.savefig(out_qualite, bbox_inches = 'tight')
+    ax.yaxis.grid(which='major', color='darkgoldenrod', linestyle='--',
+                  linewidth=0.5, zorder=1)
+    ax.yaxis.grid(which='minor', color='darkgoldenrod', linestyle='-.',
+                  linewidth=0.3, zorder=1)
+    plt.savefig(out_qualite, bbox_inches='tight')
 
 def display_metrics (list_metrics, out_matrix, out_qualite):
 
@@ -627,7 +627,7 @@ Created on Wed Mar  1 10:35:21 2017
 @author: marc lang
 """
 
-def open_image(filename, verbose = False):
+def open_image(filename, verbose=False):
   """
   Open an image file with gdal
 
@@ -676,7 +676,7 @@ def get_image_dimension(data_set, verbose=False):
     return nb_lignes, nb_col, nb_band
 
 
-def get_origin_coordinates(data_set, verbose = False):
+def get_origin_coordinates(data_set, verbose=False):
     """
     get origin coordinates
 
@@ -697,7 +697,7 @@ def get_origin_coordinates(data_set, verbose = False):
     return origin_x, origin_y
 
 
-def get_pixel_size(data_set, verbose = False):
+def get_pixel_size(data_set, verbose=False):
     """
     get pixel size
 
@@ -738,7 +738,7 @@ def convert_data_type_from_gdal_to_numpy(gdal_data_type):
     return numpy_data_type
 
 
-def load_img_as_array(filename, verbose = False):
+def load_img_as_array(filename, verbose=False):
     """
     Load the whole image into an numpy array with gdal
 
@@ -754,8 +754,8 @@ def load_img_as_array(filename, verbose = False):
     """
 
     # Get size of output array
-    data_set = open_image(filename, verbose = verbose)
-    nb_lignes, nb_col, nb_band = get_image_dimension(data_set, verbose = verbose)
+    data_set = open_image(filename, verbose=verbose)
+    nb_lignes, nb_col, nb_band = get_image_dimension(data_set, verbose=verbose)
 
     # Get data type
     band = data_set.GetRasterBand(1)
@@ -763,7 +763,7 @@ def load_img_as_array(filename, verbose = False):
     numpy_data_type = convert_data_type_from_gdal_to_numpy(gdal_data_type)
 
     # Initialize an empty array
-    array = np.empty((nb_lignes, nb_col, nb_band), dtype = numpy_data_type)
+    array = np.empty((nb_lignes, nb_col, nb_band), dtype=numpy_data_type)
 
     # Fill the array
     for idx_band in range(nb_band):
@@ -777,9 +777,9 @@ def load_img_as_array(filename, verbose = False):
     return array
 
 
-def write_image(out_filename, array, data_set = None, gdal_dtype = None,
-                transform = None, projection = None, driver_name = None,
-                nb_col = None, nb_ligne = None, nb_band = None):
+def write_image(out_filename, array, data_set=None, gdal_dtype=None,
+                transform=None, projection=None, driver_name=None,
+                nb_col=None, nb_ligne=None, nb_band=None):
     """
     Write a array into an image file.
 
@@ -973,7 +973,7 @@ import pandas as pd
 import numpy as np
 
 
-def plot_cm(cm, labels, out_filename = None):
+def plot_cm(cm, labels, out_filename=None):
     """
     Plot a confusion matrix
 
@@ -987,37 +987,37 @@ def plot_cm(cm, labels, out_filename = None):
     out_filename : str (optional)
         If indicated, the chart is saved at the `out_filename` location
     """
-    fig1, ax1 = plt.subplots(figsize = (16, 12))
+    fig1, ax1 = plt.subplots(figsize=(16, 12))
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    ax1 = PlotConfusionMatrix(cm, cmap = colorMap.YlGn)
-    ax1.add_text(font_size = 12)
-    ax1.add_x_labels(labels, rotation = 45)
+    ax1 = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
+    ax1.add_text(font_size=12)
+    ax1.add_x_labels(labels, rotation=45)
     ax1.add_y_labels(labels)
-    ax1.color_diagonal(diag_color = colorMap.YlGn,
-                         matrix_color = colorMap.Reds)
-    ax1.add_accuracy(invert_PA_UA = False, user_acc_label = 'Recall',
-                       prod_acc_label = 'Precision')
+    ax1.color_diagonal(diag_color=colorMap.YlGn,
+                         matrix_color=colorMap.Reds)
+    ax1.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
+                       prod_acc_label='Precision')
     ax1.add_f1()
-    '''    pltCm = PlotConfusionMatrix(cm, cmap = colorMap.YlGn)
+    '''    pltCm = PlotConfusionMatrix(cm, cmap=colorMap.YlGn)
 
-        pltCm.add_text(font_size = 12)
-        pltCm.add_x_labels(labels, rotation = 45)
+        pltCm.add_text(font_size=12)
+        pltCm.add_x_labels(labels, rotation=45)
         pltCm.add_y_labels(labels)
-        pltCm.color_diagonal(diag_color = colorMap.YlGn,
-                             matrix_color = colorMap.Reds)
-        pltCm.add_accuracy(invert_PA_UA = False, user_acc_label = 'Recall',
-                           prod_acc_label = 'Precision')
+        pltCm.color_diagonal(diag_color=colorMap.YlGn,
+                             matrix_color=colorMap.Reds)
+        pltCm.add_accuracy(invert_PA_UA=False, user_acc_label='Recall',
+                           prod_acc_label='Precision')
         pltCm.add_f1()'''
     if out_filename:
-        plt.savefig(out_filename, bbox_inches = 'tight')
+        plt.savefig(out_filename, bbox_inches='tight')
 
 ########### --- Ces fonctions proviennent du script classification.py
 
 ### ----- Fonctions du cours
-def get_samples_from_roi(raster_name, roi_name, value_to_extract = None,
-                         bands = None, output_fmt = 'full_matrix'):
+def get_samples_from_roi(raster_name, roi_name, value_to_extract=None,
+                         bands=None, output_fmt='full_matrix'):
     '''
     The function get the set of pixel of an image according to an roi file
     (raster). In case of raster format, both map should be of same
@@ -1072,8 +1072,8 @@ def get_samples_from_roi(raster_name, roi_name, value_to_extract = None,
     # Check if is roi is raster or vector dataset
     roi = gdal.Open(roi_name, gdal.GA_ReadOnly)
 
-    if (raster.RasterXSize != roi.RasterXSize) or \
-            (raster.RasterYSize != roi.RasterYSize):
+    if (raster.RasterXSize!=roi.RasterXSize) or \
+            (raster.RasterYSize!=roi.RasterYSize):
         print('Images should be of the same size')
         print('Raster : {}'.format(raster_name))
         print('Roi : {}'.format(roi_name))
@@ -1097,7 +1097,7 @@ def get_samples_from_roi(raster_name, roi_name, value_to_extract = None,
     roi = None  # Close the roi file
 
     try:
-        X = np.empty((t[0].shape[0], nb_band), dtype = numpy_data_type)
+        X = np.empty((t[0].shape[0], nb_band), dtype=numpy_data_type)
     except MemoryError:
         print('Impossible to allocate memory: roi too large')
         exit()
@@ -1115,7 +1115,7 @@ def get_samples_from_roi(raster_name, roi_name, value_to_extract = None,
         dict_X = {}
         dict_t = {}
         for lab in labels:
-            coord = np.where(Y == lab)[0]
+            coord = np.where(Y==lab)[0]
             dict_X[lab] = X[coord]
             dict_t[lab] = (t[0][coord], t[1][coord])
 
@@ -1143,12 +1143,12 @@ def report_from_dict_to_df(dict_report):
 
     # drop unnecessary rows and columns
     try :
-        report_df = report_df.drop(['accuracy', 'macro avg', 'weighted avg'], axis = 1)
+        report_df = report_df.drop(['accuracy', 'macro avg', 'weighted avg'], axis=1)
     except KeyError:
         print(dict_report)
-        report_df = report_df.drop(['micro avg', 'macro avg', 'weighted avg'], axis = 1)
+        report_df = report_df.drop(['micro avg', 'macro avg', 'weighted avg'], axis=1)
 
-    report_df = report_df.drop(['support'], axis = 0)
+    report_df = report_df.drop(['support'], axis=0)
     
     return report_df
 
