@@ -44,10 +44,8 @@ image_filename = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement/Se
 os.chdir(working_directory)
 
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
-#os.mkdir(f'{working_directory}/intermediate_result_classification')
 os.mkdir(os.path.join(working_directory,'intermediate_result_classification'))
 # enregistre le chemin complet sous une variable
-#iwdir = f'{working_directory}/intermediate_result_classification'
 iwdir = os.path.join(working_directory, 'intermediate_result_classification')
 
 ########### --- Rasterisation des échantillons (Sample_BD_foret_T31TCJ.shp)
@@ -179,8 +177,8 @@ for niv in range(len(nomenclature)) :
           
           if field_name == nomenclature[2] :
               # level 2
-              Y_predict_lvl2 = np.floor(Y_predict / 10)
-              Y_test_lvl2 = np.floor(Y_test / 10)
+              Y_predict_lvl2 = np.floor(Y_predict/10)
+              Y_test_lvl2 = np.floor(Y_test/10)
               # compute quality
               list_cm_lvl2.append(confusion_matrix(Y_test_lvl2, Y_predict_lvl2))
               list_accuracy_lvl2.append(accuracy_score(Y_test_lvl2, Y_predict_lvl2))
@@ -201,7 +199,7 @@ for niv in range(len(nomenclature)) :
               list_report_lvl1.append(f.report_from_dict_to_df(report_lvl1))
 
           if field_name == nomenclature[1] :
-              #level 1
+              # niveau 1
               Y_predict_lvl1 = np.floor(Y_predict/10)
               Y_test_lvl1 = np.floor(Y_test/10)
               # compute quality
@@ -222,7 +220,8 @@ for niv in range(len(nomenclature)) :
           # store them        
           list_report.append(f.report_from_dict_to_df(report))
 
-########### ---  Agregate métrics 
+########### ---  Métriques aggrégées
+    
     # stockage dans le gdf
     if field_name == nomenclature[2]:
         list_metrics_lvl3.extend(f.agg_metrics(list_cm,
@@ -252,7 +251,7 @@ for niv in range(len(nomenclature)) :
                                                   list_accuracy,
                                                   list_report))
 
-    # display Metrics by class
+    # afficher les métriques par classe
     if field_name == nomenclature[0]:
         f.display_metrics(list_metrics_lvl1, 
                         'Cm_Code_lvl1', 
@@ -322,22 +321,6 @@ for niv in range(len(nomenclature)) :
         img = np.floor(img/10)
         f.write_image(image_outputlvl1, img, data_set=image)
 
-####
-
-
-list_label = ['mean_cm' , 'mean_accuracy', 'std_accuracy' ,
-              'mean_df_report', 'std_df_report']
-
-Metrics_summerize = pd.DataFrame({
-                                'metrics': list_label,
-                                'lvl1': list_metrics_lvl1,
-                                'lvl2': list_metrics_lvl2,
-                                'lvl3': list_metrics_lvl3,
-                                #'lvl1_fromlvl3':list_metrics_lvl1_fromlvl3,
-                                'lvl2_fromlvl3': list_metrics_lvl2_fromlvl3,
-                                'lvl1_fromlvl2': list_metrics_lvl1_fromlvl2,
-                                })
-Metrics_summerize.to_csv('Metrics_summerize.csv')
 
 
 
