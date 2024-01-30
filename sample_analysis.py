@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec  4 12:15:01 2023
 
-@author: arondel, ducrocq et joffrion
-"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec  4 12:15:01 2023
@@ -13,7 +8,6 @@ Created on Mon Dec  4 12:15:01 2023
 ###############################################################################
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
 ###############################################################################
-
 
 import os
 working_directory = 'C:/Users/dsii/Downloads/bd_foret_teledec_python-main'
@@ -32,6 +26,14 @@ import my_function as f
 #data_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
 data_path = 'C:/Users/dsii/Downloads/bd_foret_teledec_python-main/data'
 
+# --- Données d'entrée
+shapefile_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Sample_BD_foret_T31TCJ.shp'
+image_filename = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Serie_temp_S2_ndvi.tif'
+
+###############################################################################
+##----------------------------- SAMPLE ANALYSIS -----------------------------##
+###############################################################################
+
 # --- Répertoire de travail actuel 
 os.chdir(working_directory)
 
@@ -43,11 +45,6 @@ iwdir = os.path.join(working_directory, 'intermediate_result_sample_analysis')
 # --- Création d'un nouveau sous-dossier pour y stocker les résultats finaux
 my_folder = os.path.join(working_directory, 'diag_result')
 os.mkdir(os.path.join(working_directory, 'diag_result'))
-
-
-###############################################################################
-##----------------------------- SAMPLE ANALYSIS -----------------------------##
-###############################################################################
 
 ########### --- Création de 3 diagrammes en bâton du nombre de polygones par classe
 
@@ -61,8 +58,6 @@ f.create_polygons_bar_charts(shapefile_path, column_name, save_path_template)
 ########### --- Création de diagrammes sur le nombre de pixels par classe
 
 # rasterisation du fichier Sample_BD_foret_T31TCJ.shp par classe dans le dossier intermédiaire
-image_filename = os.path.join(data_path, 'Serie_temp_S2_ndvi.tif')
-
 for niv in range(1, 4):
     sample_filename_niv = os.path.join(iwdir, 'sample_bdforet_codelvl{}.tif'.format(niv))
     # le champ nécessaire à la rasterisation (correspond au niveau 1, 2 puis 3)
@@ -79,9 +74,6 @@ f.generate_pixel_count_diagrams(shapefile_path, column_name, raster_path, save_p
 ########### --- Création de graphiques représentant la signature temporelle de la moyenne
 ########### --- et l'écart type du ndvi par classe
 
-#Définition des 
-
-image_filename = os.path.join(data_path, 'Serie_temp_S2_ndvi.tif')
 sample_code_lvl1 = os.path.join(iwdir, 'sample_bdforet_codelvl1.tif')
 sample_code_lvl2 = os.path.join(iwdir, 'sample_bdforet_codelvl2.tif')
 sample_code_lvl3 = os.path.join(iwdir, 'sample_bdforet_codelvl3.tif')
