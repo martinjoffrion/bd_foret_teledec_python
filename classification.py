@@ -8,14 +8,15 @@ Created on Sat Jan 20 13:10:56 2024
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
 ###############################################################################
 
-working_directory = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4'
+# --- Chemin d'accès du dossier rendu dézippé :
+working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4'
+
 import os
-os.environ['MYOTB'] = 'C:/Users/clair/Documents/OTB-8.1.2-Win64/bin'
+os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
 os.environ['MYRAM'] = '8000'
 import geopandas as gpd
 import my_function as f
 import pandas as pd
-
 from sklearn.ensemble import RandomForestClassifier as RF
 import numpy as np
 from sklearn.model_selection import StratifiedGroupKFold
@@ -24,29 +25,30 @@ from sklearn.metrics import confusion_matrix, classification_report, \
 import matplotlib.pyplot as plt
 import time
 
-working_directory = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/traitement'
+########### --- Chemin d'accès du dossier qui comprendra les résultats du script :
+working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
 
 #Initiate compteur
 # get the start time
 st = time.time()
 
-# --- Répertoire de travail actuel 
-os.chdir(working_directory)
-
-# --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
-os.mkdir(f'{working_directory}/intermediate_result_4b')
-# os.mkdir(os.path.join(working_directory,'intermediate_result_4b')
-# enregistre le chemin complet sous une variable
-iwdir = f'{working_directory}/intermediate_result_4b'
-#iwdir = os.path.join(working_directory,'intermediate_result_4b'
-
-sample_bdforet = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/data_set/Sample_BD_foret_T31TCJ_div2.shp'
-
-image_filename = 'C:/Users/clair/Documents/projet_teledection_sigmaM2_group4/traitement/Serie_temp_S2_allbands.tif'
+########### --- Chemin d'accès pour les données d'entrée
+sample_bdforet = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Sample_BD_foret_T31TCJ_div2.shp'
+image_filename = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement/Serie_temp_S2_allbands.tif'
 
 ###############################################################################
 ##----------------------------- RASTERISATION -----------------------------##
 ###############################################################################
+
+# --- Répertoire de travail actuel 
+os.chdir(working_directory)
+
+# --- Création d'un nouveau sous-dossier pour y stocker les résultats intermédiaires
+#os.mkdir(f'{working_directory}/intermediate_result_classification')
+os.mkdir(os.path.join(working_directory,'intermediate_result_classification'))
+# enregistre le chemin complet sous une variable
+#iwdir = f'{working_directory}/intermediate_result_classification'
+iwdir = os.path.join(working_directory, 'intermediate_result_classification')
 
 ########### --- Rasterisation des échantillons (Sample_BD_foret_T31TCJ.shp)
 
