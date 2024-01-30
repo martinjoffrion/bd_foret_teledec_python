@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan 20 13:10:56 2024
+Created on Wed Jan 03 13:10:56 2024
 
 @author: arondel, ducrocq et joffrion
 """
 ###############################################################################
 ##--------------------- CHEMINS D'ACCES A RENSEIGNER ------------------------##
 ###############################################################################
-
-# --- Chemin d'accès du dossier rendu dézippé :
-working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4'
 
 import os
 os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
@@ -34,7 +31,7 @@ st = time.time()
 
 ########### --- Chemin d'accès pour les données d'entrée
 sample_bdforet = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Sample_BD_foret_T31TCJ_div2.shp'
-image_filename = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement/Serie_temp_S2_allbands.tif'
+image_filename = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Serie_temp_S2_allbands.tif'
 
 ###############################################################################
 ##----------------------------- RASTERISATION -----------------------------##
@@ -60,10 +57,6 @@ sample_bdforet_shp['fid'] = sample_bdforet_shp.reset_index().index + 1
 sample_bdforet_filename = os.path.join(iwdir, 'Sample_BD_foret_T31TCJ_fid.shp')
 sample_bdforet_shp.to_file(sample_bdforet_filename,
                            driver="ESRI Shapefile")
-    
-nomenclature = ['Code_lvl1', 'Code_lvl2', 'Code_lvl3']
-for i in nomenclature :
-    print(f'for {i} nbr of NA is {sample_bdforet_shp[i].isna().sum()}')
 
 # champs nécessaires pour la fonction cmd_Rasterization
 field_name = 'fid' # champ nécessaire à la rasterisation
@@ -176,7 +169,7 @@ for niv in range(len(nomenclature)) :
           Y_predict = clf.predict(X_test)
           
           if field_name == nomenclature[2] :
-              # level 2
+              # niveau 2
               Y_predict_lvl2 = np.floor(Y_predict/10)
               Y_test_lvl2 = np.floor(Y_test/10)
               # compute quality
@@ -187,7 +180,7 @@ for niv in range(len(nomenclature)) :
                                              output_dict=True)
               list_report_lvl2.append(f.report_from_dict_to_df(report_lvl2))
               
-              # level 1
+              # niveau 1
               Y_predict_lvl1 = np.floor(Y_predict/100)
               Y_test_lvl1 = np.floor(Y_test/100)
               # compute quality
@@ -320,16 +313,4 @@ for niv in range(len(nomenclature)) :
         image_outputlvl1 = f'carte_essences_lvl1_from{level_name}.tif'
         img = np.floor(img/10)
         f.write_image(image_outputlvl1, img, data_set=image)
-
-
-
-
-
-
-
-
-
-
-
-
 

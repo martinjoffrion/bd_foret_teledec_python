@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec  4 12:15:01 2023
@@ -10,21 +9,17 @@ Created on Mon Dec  4 12:15:01 2023
 ###############################################################################
 
 import os
-working_directory = 'C:/Users/dsii/Downloads/bd_foret_teledec_python-main'
-os.chdir(working_directory)
 
 # --- Mettre le chemin d'accès du dossier OTB-8.1.2/bin :
-#os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
-os.environ['MYOTB'] = 'C:/OTB-8.1.2-Win64/bin' #path to the OTB bin folder
+os.environ['MYOTB'] = 'le/chemin/vers/OTB-8.1.2-Win64/bin'
 os.environ['MYRAM'] = '8000'
 import my_function as f
 
 # --- Chemin d'accès du dossier qui comprendra les diagrammes :
-#working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
+working_directory = 'le/chemin/vers/projet_teledection_sigmaM2_group4/traitement'
 
 # --- Chemin d'accès du dossier comprenant les données d'entrée :
-#data_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
-data_path = 'C:/Users/dsii/Downloads/bd_foret_teledec_python-main/data'
+data_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set'
 
 # --- Données d'entrée
 shapefile_path = 'le/chemin/vers/projet_teledection_sigmaM2_group4/data_set/Sample_BD_foret_T31TCJ.shp'
@@ -77,7 +72,7 @@ f.generate_pixel_count_diagrams(shapefile_path, column_name, raster_path, save_p
 sample_code_lvl1 = os.path.join(iwdir, 'sample_bdforet_codelvl1.tif')
 sample_code_lvl2 = os.path.join(iwdir, 'sample_bdforet_codelvl2.tif')
 sample_code_lvl3 = os.path.join(iwdir, 'sample_bdforet_codelvl3.tif')
-bande_names = ['15/04/21', '31/03/21', '19/07/21', '17/10/21', '16/12/21', '25/01/22']
+bande_names = ['31/03/21', '15/04/21', '19/07/21', '17/10/21', '16/12/21', '25/01/22']
 code_lvl = ['1', '2', '3']
 
 f.generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl1,
@@ -86,5 +81,4 @@ f.generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl2,
                                    code_lvl[1], bande_names)
 f.generate_temporal_signature_plot(my_folder, image_filename, sample_code_lvl3,
                                    code_lvl[2], bande_names)
-
 

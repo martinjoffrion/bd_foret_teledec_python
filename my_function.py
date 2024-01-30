@@ -575,7 +575,7 @@ def plot_class_metrics (mean_oa, std_oa, mean_report, std_report, out_qualite):
     # Display class metrics
     fig, ax = plt.subplots(figsize=(10, 7))
     ax = mean_report.T.plot.bar(ax=ax, yerr=std_report.T, zorder=2)
-    ax.set_ylim(0.5, 1)
+    ax.set_ylim(0, 1)
     _ = ax.text(1.5, 0.95, 'OA : {:.2f} +- {:.2f}'.format(mean_oa,
                                                           std_oa),
                 fontsize=14)
