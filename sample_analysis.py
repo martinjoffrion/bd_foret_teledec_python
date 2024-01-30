@@ -2,7 +2,7 @@
 """
 Created on Mon Dec  4 12:15:01 2023
 
-@author: leond
+@author: arondel, ducrocq et joffrion
 """
 # -*- coding: utf-8 -*-
 """
@@ -68,9 +68,9 @@ for niv in range(1, 4):
     # le champ nécessaire à la rasterisation (correspond au niveau 1, 2 puis 3)
     field_name = 'Code_lvl{}'.format(niv)  
     # appel à la fonction
-    f.cmd_Rasterization(sample_bdforet_filename = shapefile_path, 
-                        out_sample_filename = sample_filename_niv, 
-                        image_filename = image_filename, field_name = field_name)
+    f.cmd_Rasterization(sample_bdforet_filename=shapefile_path, 
+                        out_sample_filename=sample_filename_niv, 
+                        image_filename=image_filename, field_name=field_name)
 
 raster_path = image_filename
 save_path_template2 = os.path.join(my_folder, 'diag_baton_nb_pix_lvl{column_number}.png')
