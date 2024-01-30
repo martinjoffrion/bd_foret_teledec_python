@@ -81,7 +81,7 @@ img_crs = img.crs
 emprise_32631 = emprise.to_crs(img_crs)
 
 # sauvegarde de la nouvelle projection de l'emprise
-emprise_32631.to_file(os.path.join(iwdir, 'emprise_32631'), driver = 'ESRI Shapefile')
+emprise_32631.to_file(os.path.join(iwdir, 'emprise_32631'), driver='ESRI Shapefile')
 new_emprise = os.path.join(iwdir, 'emprise_32631')
 
 ########### --- Début de la phase de pré-traitement
@@ -116,7 +116,7 @@ for subfil in range(len(files)):
         input_img = list_band_name[i]
         band_name = os.path.basename(input_img)
         name = 'cut{band_name}'
-        output_raster = os.path.join(iwdir, name.format(band_name = band_name))
+        output_raster = os.path.join(iwdir, name.format(band_name=band_name))
         # appel de la fonction cmd_ExtractROI
         f.cmd_ExtractROI(input_img, new_emprise, output_raster)
         list_bande_cut.append(output_raster)
@@ -140,7 +140,7 @@ for subfil in range(len(files)):
         inm = list_bande_20m_plus[i]
         band_name = os.path.basename(inm)
         name = '_10m_{band_name}'
-        output_raster = os.path.join(iwdir, name.format(band_name = band_name))
+        output_raster = os.path.join(iwdir, name.format(band_name=band_name))
         # appel de la fonction cmd_Superimpose
         f.cmd_Superimpose(inr, inm, output_raster)
         list_bande_finale.append(output_raster)
@@ -152,7 +152,7 @@ for subfil in range(len(files)):
     # appel de la fonction get_date_f_b_path
     date =  f.get_date_f_b_path(list_bande_finale[0]) # recupération la date de la première bande
     name = 'output_{date}_date.tif'
-    output_concat = os.path.join(iwdir, name.format(date = date))
+    output_concat = os.path.join(iwdir, name.format(date=date))
     # appel de la fonction cmd_ConcatenateImages
     f.cmd_ConcatenateImages(list_bande_finale, output_concat)
     list_date_path.append(output_concat)
