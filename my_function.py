@@ -381,7 +381,7 @@ def generate_pixel_count_diagrams(shapefile_path, column_names, raster_path, sav
         gdf['nb_pixels'] = pixel_counts
 
         # Grouper le GeoDataFrame par la classe et calculer la somme des pixels
-        pixel_sum_per_class = gdf.groupby(class_column)['nb_pixels'].sum()
+        pixel_sum_per_class = gdf.groupby(class_column)['nb_pixels'].sum().sort_values(ascending=False)
 
         # Créer le graphique à barres
         plt.figure(figsize=(10, 6))
